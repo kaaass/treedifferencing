@@ -22,6 +22,7 @@ package com.github.gumtreediff.gen.jdt;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 
 import com.github.gumtreediff.gen.jdt.cd.EntityType;
 import com.github.gumtreediff.tree.ITree;
@@ -50,17 +51,24 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
     protected void pushNode(ASTNode n, String label) {
         int type = n.getNodeType();
         String typeName = n.getClass().getSimpleName();
-        push(type, typeName, label, n.getStartPosition(), n.getLength());
+        push(n, type, typeName, label, n.getStartPosition(), n.getLength());
     }
 
     protected void pushFakeNode(EntityType n, int startPosition, int length) {
         int type = -n.ordinal(); // Fake types have negative types (but does it matter ?)
         String typeName = n.name();
-        push(type, typeName, "", startPosition, length);
+        push(null, type, typeName, "", startPosition, length);
     }
 
-    private void push(int type, String typeName, String label, int startPosition, int length) {
+    public HashMap<ASTNode, ITree> nodeToITree = new HashMap<>();
+    public HashMap<ITree, ASTNode > ITreeToNode = new HashMap<>();
+    
+    private void push(ASTNode node, int type, String typeName, String label, int startPosition, int length) {
         ITree t = context.createTree(type, label, typeName);
+        if (node != null && t != null) {
+        	nodeToITree.put(node, t);
+        	ITreeToNode.put(t, node);
+        }
         t.setPos(startPosition);
         t.setLength(length);
 
