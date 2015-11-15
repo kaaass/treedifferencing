@@ -227,6 +227,31 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     public void endVisit(SingleVariableDeclaration node) {
         popNode();
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean visit(AnnotationTypeDeclaration node) {
+        if (node.getJavadoc() != null) {
+            node.getJavadoc().accept(this);
+        }
+        // @Inria
+        pushNode(node, node.getName().toString());
+        visitListAsNode(EntityType.MODIFIERS, node.modifiers());
+
+
+        // @Inria
+        // Change Distiller does not check the changes at Class Field declaration
+        for (Object fd : node.bodyDeclarations()) {
+            ((ASTNode)fd).accept(this);
+        }
+        return false;
+    }
+
+    @Override
+    public void endVisit(AnnotationTypeDeclaration node) {
+        popNode();
+    }
+    
 
     @SuppressWarnings("unchecked")
     @Override
@@ -412,6 +437,15 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
         popNode();
     }
 
+    @Override
+    public void endVisit(CompilationUnit node) {
+    	if (this.getTreeContext().getRoot() == null) {
+    		pushNode(node, "");
+    		popNode();
+    	}
+        
+    }
+    
     @Override
     public boolean visit(ConstructorInvocation node) {
         pushNode(node, node.toString());
