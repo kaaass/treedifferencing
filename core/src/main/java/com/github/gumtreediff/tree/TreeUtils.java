@@ -1,4 +1,5 @@
 /*
+E
  * This file is part of GumTree.
  *
  * GumTree is free software: you can redistribute it and/or modify
@@ -308,8 +309,11 @@ public final class TreeUtils {
                     if (current.isLeaf())
                         break;
                 }
-                return val;
-            }
+				if (!it.hasNext()) {
+					current = null;
+				}
+				return val;
+			}
 
             @Override
             public void remove() {
