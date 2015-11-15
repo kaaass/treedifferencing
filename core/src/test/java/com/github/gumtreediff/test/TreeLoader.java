@@ -35,6 +35,10 @@ public class TreeLoader {
         return new Pair<>(load("/action_v0.xml"), load("/action_v1.xml"));
     }
 
+    public static Pair<TreeContext, TreeContext> getCdCustomPair() {
+        return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
+    }
+
     public static Pair<TreeContext, TreeContext> getZsCustomPair() {
         return new Pair<>(load("/zs_v0.xml"), load("/zs_v1.xml"));
     }
