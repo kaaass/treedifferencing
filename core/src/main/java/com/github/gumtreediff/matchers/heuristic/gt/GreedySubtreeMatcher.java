@@ -80,7 +80,13 @@ public class GreedySubtreeMatcher extends SubtreeMatcher {
         }
 
         public int compare(Mapping m1, Mapping m2) {
-            return Double.compare(simMap.get(m2), simMap.get(m1));
+            if (simMap.get(m2).compareTo(simMap.get(m1)) != 0) {
+                return Double.compare(simMap.get(m2), simMap.get(m1));
+            }
+            if (m1.first.getId() != m2.first.getId()) {
+                return Integer.compare(m1.first.getId(), m2.first.getId());
+            }
+            return Integer.compare(m1.second.getId(), m2.second.getId());
         }
 
         private Map<ITree, List<ITree>> srcDescendants = new HashMap<>();
