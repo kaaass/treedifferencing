@@ -4,4 +4,7 @@ dependencies {
 	compile 'com.github.mpkorstanje:simmetrics-core:3.2.3'
 	compile 'net.sf.trove4j:trove4j:3.0.3'
 	compile 'com.google.code.gson:gson:2.4'
+	compile 'org.eclipse.tycho:org.eclipse.jdt.core:3.11.0.v20150602-1242'
+	compile 'org.eclipse.core:runtime:3.10.0-v20140318-2214'
+	
 }

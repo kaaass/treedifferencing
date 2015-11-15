@@ -37,9 +37,9 @@ import com.github.gumtreediff.tree.ITree;
  *
  */
 
-public class LCSMatcher extends Matcher {
+public class LCSOptMatcher extends Matcher {
 
-	public LCSMatcher(ITree src, ITree dst, MappingStore store) {
+	public LCSOptMatcher(ITree src, ITree dst, MappingStore store) {
 		super(src, dst, store);
 
 	}
