@@ -1,6 +1,6 @@
-This is a for of [Gumtree](https://github.com/GumTreeDiff/gumtree/wiki).
+This is a fork of [Gumtree](https://github.com/GumTreeDiff/gumtree/wiki).
 
-It contains an experimental a new implementation of an optimized ChangeDistiller
+It contains a new optimized implementation of ChangeDistiller
 and several general optimizations for tree differencing algorithms.
 
 ## Structure
