@@ -6,31 +6,32 @@
  * the License, or (at your option) any later version.
  *
  * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTIcULAR PURPOSE. See the GNU Lesser
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
  * General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
  * not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2015 Georg Dotzler <georg.dotzler@fau.de> Copyright 2015 Marius Kamp
- * <marius.kamp@fau.de>
+ *
+ * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
+ * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
 */
 
-package extern.com.github.gumtreediff.matchers.heuristic.mtdiff.intern;
+package com.github.gumtreediff.matchers.heuristic.mtdiff.intern;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 public class LeafSimResults<T> {
-  public final ConcurrentHashMap<T, ArrayList<MatchingCandidate>> subleafCandidateMap;
-  public final ConcurrentSkipListSet<MatchingCandidate> submatchedLeaves;
+    public final ConcurrentHashMap<T, ArrayList<MatchingCandidate>> subleafCandidateMap;
+    public final ConcurrentSkipListSet<MatchingCandidate> submatchedLeaves;
 
-  LeafSimResults(ConcurrentHashMap<T, ArrayList<MatchingCandidate>> subleafCandidateMap,
-      ConcurrentSkipListSet<MatchingCandidate> submatchedLeaves) {
-    super();
-    this.subleafCandidateMap = subleafCandidateMap;
-    this.submatchedLeaves = submatchedLeaves;
-  }
+    LeafSimResults(ConcurrentHashMap<T, ArrayList<MatchingCandidate>> subleafCandidateMap,
+                   ConcurrentSkipListSet<MatchingCandidate> submatchedLeaves) {
+        super();
+        this.subleafCandidateMap = subleafCandidateMap;
+        this.submatchedLeaves = submatchedLeaves;
+    }
 
 }

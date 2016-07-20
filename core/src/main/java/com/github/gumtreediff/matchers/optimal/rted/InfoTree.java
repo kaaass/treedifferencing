@@ -116,7 +116,7 @@ public class InfoTree {
     /**
      * Returns the size of the tree.
      * 
-     * @return
+     * @return size
      */
     public int getSize() {
         return treeSize;
@@ -178,7 +178,7 @@ public class InfoTree {
     /**
      * Returns the postorder of current root node.
      * 
-     * @return 
+     * @return postorder
      */
     public int getCurrentNode() {
         return currentNode;
@@ -201,7 +201,7 @@ public class InfoTree {
      * 
      * @param aT
      * @param postorder
-     * @return 
+     * @return the information
      */
 	private int gatherInfo(ITree aT, int postorder) {
         int currentSize = 0;
@@ -415,7 +415,7 @@ public class InfoTree {
     /**
      * Transforms a list of Integer objects to an array of primitive int values.
      * @param integers
-     * @return 
+     * @return the list
      */
     public static int[] toIntArray(List<Integer> integers) {
         int[] ints = new int[integers.size()];

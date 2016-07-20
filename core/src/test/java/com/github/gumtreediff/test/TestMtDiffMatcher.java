@@ -32,14 +32,14 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class TestCdOptMatcher {
+public class TestMtDiffMatcher {
 
     @Test
     public void testWithCustomExample() {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
         ITree src = trees.getFirst().getRoot();
         ITree dst = trees.getSecond().getRoot();
-        Matcher matcher = new OptimizedVersions.CD_OPT(src, dst, new MappingStore());
+        Matcher matcher = OptimizedVersions.MtDiff.getMtDiffJava(src, dst, new MappingStore(), null);
         matcher.match();
         assertEquals(5, matcher.getMappingSet().size());
         assertTrue(matcher.getMappings().has(src, dst.getChild(0)));

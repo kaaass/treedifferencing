@@ -6,36 +6,37 @@
  * the License, or (at your option) any later version.
  *
  * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTIcULAR PURPOSE. See the GNU Lesser
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
  * General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
  * not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2015 Georg Dotzler <georg.dotzler@fau.de> Copyright 2015 Marius Kamp
- * <marius.kamp@fau.de>
+ *
+ * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
+ * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
 */
 
-package extern.com.github.gumtreediff.matchers.heuristic.mtdiff.intern;
+package com.github.gumtreediff.matchers.heuristic.mtdiff.intern;
 
 public class TreeMatcherConfiguration {
-  public final double leafThreshold;
-  public final double weightPosition;
-  public final double weightSimilarity;
+    public final double leafThreshold;
+    public final double weightPosition;
+    public final double weightSimilarity;
 
-  /**
-   * Instantiates a new tree matcher configuration.
-   *
-   * @param leafThreshold the leaf threshold
-   * @param weightSimilarity the weight similarity
-   * @param weightPosition the weight position
-   */
-  public TreeMatcherConfiguration(double leafThreshold, double weightSimilarity,
-      double weightPosition) {
-    this.leafThreshold = leafThreshold;
-    this.weightSimilarity = weightSimilarity;
-    this.weightPosition = weightPosition;
+    /**
+     * Instantiates a new tree matcher configuration.
+     *
+     * @param leafThreshold    the leaf threshold
+     * @param weightSimilarity the weight similarity
+     * @param weightPosition   the weight position
+     */
+    public TreeMatcherConfiguration(double leafThreshold, double weightSimilarity,
+                                    double weightPosition) {
+        this.leafThreshold = leafThreshold;
+        this.weightSimilarity = weightSimilarity;
+        this.weightPosition = weightPosition;
 
-  }
+    }
 
 }

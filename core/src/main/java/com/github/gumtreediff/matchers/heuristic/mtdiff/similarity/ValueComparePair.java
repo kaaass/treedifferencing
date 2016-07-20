@@ -6,78 +6,78 @@
  * the License, or (at your option) any later version.
  *
  * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTIcULAR PURPOSE. See the GNU Lesser
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
  * General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
  * not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2015 Georg Dotzler <georg.dotzler@fau.de> Copyright 2015 Marius Kamp
- * <marius.kamp@fau.de>
+ *
+ * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
+ * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
 */
 
-package extern.com.github.gumtreediff.matchers.heuristic.mtdiff.similarity;
+package com.github.gumtreediff.matchers.heuristic.mtdiff.similarity;
 
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.tree.ITree;
 
 /**
- * A {@see ComparePair} with an additional value field. However, the value field is not considered
+ * A ComparePair with an additional value field. However, the value field is not considered
  * when comparing two instances of this class. Thus two instances of ValueComparePair with the same
  * elements but different values would be considered equal and would return the same hash code.
- *
  */
 public class ValueComparePair extends Mapping {
-  private final Float value;
+    private final Float value;
 
-  /**
-   * Instantiates a new value compare pair.
-   *
-   * @param oldElement the old element
-   * @param newElement the new element
-   * @param value the value
-   */
-  public ValueComparePair(final ITree oldElement, final ITree newElement, final Float value) {
-    super(oldElement, newElement);
-    this.value = value;
-  }
+    /**
+     * Instantiates a new value compare pair.
+     *
+     * @param oldElement the old element
+     * @param newElement the new element
+     * @param value      the value
+     */
+    public ValueComparePair(final ITree oldElement, final ITree newElement, final Float value) {
+        super(oldElement, newElement);
+        this.value = value;
+    }
 
-  /**
-   * Returns an equivalent {@see ComparePair} without the associated value.
-   *
-   * @return the mapping
-   */
-  public final Mapping dropValue() {
-    return new Mapping(this.first, this.second);
-  }
+    /**
+     * Returns an equivalent ComparePair without the associated value.
+     *
+     * @return the mapping
+     */
+    public final Mapping dropValue() {
+        return new Mapping(this.first, this.second);
+    }
 
-  
-  /**
-   * Equals.
-   *
-   * @param obj the obj
-   * @return true, if successful
-   */
-  public final boolean equals(final Object obj) {
-    return super.equals(obj);
-  }
 
-  /**
-   * Returns the value associated with this pair.
-   *
-   * @return the value
-   */
-  public final Float getValue() {
-    return value;
-  }
+    /**
+     * Equals.
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
+    public final boolean equals(final Object obj) {
+        return super.equals(obj);
+    }
 
-  
-  /**
-   * Hash code.
-   *
-   * @return the hash
-   */
-  public final int hashCode() {
-    return super.hashCode();
-  }
+    /**
+     * Returns the value associated with this pair.
+     *
+     * @return the value
+     */
+    public final Float getValue() {
+        return value;
+    }
+
+
+    /**
+     * Hash code.
+     *
+     * @return the hash
+     */
+    public final int hashCode() {
+        return super.hashCode();
+    }
 }
