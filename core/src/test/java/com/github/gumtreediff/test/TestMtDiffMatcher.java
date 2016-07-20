@@ -39,7 +39,7 @@ public class TestMtDiffMatcher {
         Pair<TreeContext, TreeContext> trees = TreeLoader.getZsCustomPair();
         ITree src = trees.getFirst().getRoot();
         ITree dst = trees.getSecond().getRoot();
-        Matcher matcher = OptimizedVersions.MtDiff.getMtDiffJava(src, dst, new MappingStore(), null);
+        Matcher matcher = new OptimizedVersions.MtDiff(src, dst, new MappingStore(), null);
         matcher.match();
         assertEquals(5, matcher.getMappingSet().size());
         assertTrue(matcher.getMappings().has(src, dst.getChild(0)));

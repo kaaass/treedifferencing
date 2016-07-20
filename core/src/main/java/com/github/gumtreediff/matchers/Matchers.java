@@ -35,6 +35,16 @@ public class Matchers extends Registry.NamedRegistry<String, Matcher, Register> 
         return registry;
     }
 
+    public static final Matchers getMtDiffInstance() {
+        if (registry == null)
+            registry = new Matchers(true);
+        return registry;
+    }
+
+    private Matchers(boolean mtdiff) {
+        install(OptimizedVersions.MtDiff.class);
+    }
+
     private Matchers() {
         install(CompositeMatchers.ClassicGumtree.class);
     }

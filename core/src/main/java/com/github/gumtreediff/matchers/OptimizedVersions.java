@@ -48,14 +48,14 @@ public class OptimizedVersions {
         /**
          * Instantiates the sequential ChangeDistiller version.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public CdSeq(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new ChangeDistillerLeavesMatcher(src, dst, store),
-                            new ChangeDistillerBottomUpMatcher(src, dst, store) });
+                    new Matcher[]{new ChangeDistillerLeavesMatcher(src, dst, store),
+                            new ChangeDistillerBottomUpMatcher(src, dst, store)});
         }
     }
 
@@ -64,14 +64,14 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cd(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new ChangeDistillerParallelLeavesMatcher(src, dst, store),
-                            new ChangeDistillerBottomUpMatcher(src, dst, store) });
+                    new Matcher[]{new ChangeDistillerParallelLeavesMatcher(src, dst, store),
+                            new ChangeDistillerBottomUpMatcher(src, dst, store)});
         }
     }
 
@@ -80,15 +80,15 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta A.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cda(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new ChangeDistillerParallelLeavesMatcher(src, dst, store),
-                            new ChangeDistillerBottomUpMatcher(src, dst, store) });
+                            new ChangeDistillerBottomUpMatcher(src, dst, store)});
         }
     }
 
@@ -97,13 +97,13 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta A-B.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cdab(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new ChangeDistillerParallelLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
                             new LcsOptMatcher(src, dst, store)
@@ -117,13 +117,13 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta A-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cdabcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new ChangeDistillerParallelLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
                             new LcsOptMatcher(src, dst, store),
@@ -138,13 +138,13 @@ public class OptimizedVersions {
         /**
          * Instantiates the sequential ChangeDistiller version with Theta A-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public CdabcdeSeq(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new ChangeDistillerLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
                             new LcsOptMatcher(src, dst, store),
@@ -159,16 +159,16 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta A, C-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cdacde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new ChangeDistillerParallelLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
-                            new FineGrainedOptimizationsMatcher(src, dst, store) });
+                            new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
@@ -177,15 +177,15 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta B.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cdb(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new ChangeDistillerParallelLeavesMatcher(src, dst, store),
+                    new Matcher[]{new ChangeDistillerParallelLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
-                            new LcsOptMatcher(src, dst, store) });
+                            new LcsOptMatcher(src, dst, store)});
         }
     }
 
@@ -194,16 +194,16 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta B-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cdbcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new ChangeDistillerParallelLeavesMatcher(src, dst, store),
+                    new Matcher[]{new ChangeDistillerParallelLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
                             new LcsOptMatcher(src, dst, store),
-                            new FineGrainedOptimizationsMatcher(src, dst, store) });
+                            new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
@@ -212,52 +212,55 @@ public class OptimizedVersions {
         /**
          * Instantiates the parallel ChangeDistiller version with Theta C-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Cdcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new ChangeDistillerParallelLeavesMatcher(src, dst, store),
+                    new Matcher[]{new ChangeDistillerParallelLeavesMatcher(src, dst, store),
                             new ChangeDistillerBottomUpMatcher(src, dst, store),
-                            new FineGrainedOptimizationsMatcher(src, dst, store) });
+                            new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
+    @Register(id = "mtdiff", defaultMatcher = true)
     public static class MtDiff extends CompositeMatcher {
 
         /**
          * Instantiates MTDIFF.
          *
-         * @param src the src
-         * @param dst the dst
-         * @param store the store
-         * @param executorService the executor service
-         * @param configuration the configuration
-         * @param labelConfiguration the label configuration
+         * @param src                the src
+         * @param dst                the dst
+         * @param store              the store
          */
-        public MtDiff(ITree src, ITree dst, MappingStore store, ExecutorService executorService,
-                      TreeMatcherConfiguration configuration, LabelConfiguration labelConfiguration) {
+        public MtDiff(ITree src, ITree dst, MappingStore store) {
+            this(src, dst, store, null);
+        }
+
+        /**
+         * Instantiates MTDIFF.
+         *
+         * @param src                the src
+         * @param dst                the dst
+         * @param store              the store
+         * @param executorService    the executor service
+         */
+        public MtDiff(ITree src, ITree dst, MappingStore store, ExecutorService executorService) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new MtDiffOptimizedMatcher(src, dst, store), new LcsOptMatcher(src, dst, store),
                             new FineGrainedOptimizationsMatcher(src, dst, store)
 
                     });
-            ((MtDiffOptimizedMatcher) matchers[1]).initMtDiff(executorService, configuration,
-                    labelConfiguration);
-        }
-
-        public static CompositeMatcher getMtDiffJava(ITree src,
-                ITree dst, MappingStore store, ExecutorService executorService) {
             TreeMatcherConfiguration configuration = null;
             configuration = new TreeMatcherConfiguration(0.88f, 0.37f, 0.0024f);
 
             HashSet<Integer> labelsForValueCompare = new HashSet<Integer>();
             labelsForValueCompare
-                    .addAll(Arrays.asList(new Integer[] {
+                    .addAll(Arrays.asList(new Integer[]{
 
-                        org.eclipse.jdt.core.dom.ASTNode.CHARACTER_LITERAL,
+                            org.eclipse.jdt.core.dom.ASTNode.CHARACTER_LITERAL,
                             org.eclipse.jdt.core.dom.ASTNode.PRIMITIVE_TYPE,
                             org.eclipse.jdt.core.dom.ASTNode.UNION_TYPE,
                             org.eclipse.jdt.core.dom.ASTNode.WILDCARD_TYPE,
@@ -268,26 +271,26 @@ public class OptimizedVersions {
                             org.eclipse.jdt.core.dom.ASTNode.BOOLEAN_LITERAL,
                             org.eclipse.jdt.core.dom.ASTNode.PREFIX_EXPRESSION,
                             org.eclipse.jdt.core.dom.ASTNode.POSTFIX_EXPRESSION,
-                            org.eclipse.jdt.core.dom.ASTNode.ASSIGNMENT }));
+                            org.eclipse.jdt.core.dom.ASTNode.ASSIGNMENT}));
 
             final HashSet<Integer> labelsForRealCompare = new HashSet<Integer>();
 
             HashSet<Integer> labelsForIntCompare = new HashSet<Integer>();
             labelsForIntCompare
-                    .addAll(Arrays.asList(new Integer[] { org.eclipse.jdt.core.dom.ASTNode.NUMBER_LITERAL }));
+                    .addAll(Arrays.asList(new Integer[]{org.eclipse.jdt.core.dom.ASTNode.NUMBER_LITERAL}));
 
             HashSet<Integer> labelsForStringCompare = new HashSet<Integer>();
-            labelsForStringCompare.addAll(Arrays.asList(new Integer[] {
+            labelsForStringCompare.addAll(Arrays.asList(new Integer[]{
                     org.eclipse.jdt.core.dom.ASTNode.SIMPLE_NAME, org.eclipse.jdt.core.dom.ASTNode.SIMPLE_TYPE,
                     org.eclipse.jdt.core.dom.ASTNode.STRING_LITERAL,
                     org.eclipse.jdt.core.dom.ASTNode.ARRAY_TYPE,
                     org.eclipse.jdt.core.dom.ASTNode.PARAMETERIZED_TYPE,
                     org.eclipse.jdt.core.dom.ASTNode.QUALIFIED_TYPE,
-                    org.eclipse.jdt.core.dom.ASTNode.QUALIFIED_NAME }));
+                    org.eclipse.jdt.core.dom.ASTNode.QUALIFIED_NAME}));
 
             HashSet<Integer> labelsForBoolCompare = new HashSet<Integer>();
             labelsForBoolCompare
-                    .addAll(Arrays.asList(new Integer[] { org.eclipse.jdt.core.dom.ASTNode.BOOLEAN_LITERAL }));
+                    .addAll(Arrays.asList(new Integer[]{org.eclipse.jdt.core.dom.ASTNode.BOOLEAN_LITERAL}));
 
             LabelConfiguration labelConfiguration =
                     new LabelConfiguration(
@@ -297,9 +300,10 @@ public class OptimizedVersions {
                             org.eclipse.jdt.core.dom.ASTNode.SIMPLE_TYPE, org.eclipse.jdt.core.dom.ASTNode.MODIFIER,
                             labelsForValueCompare, labelsForRealCompare, labelsForIntCompare,
                             labelsForStringCompare, labelsForBoolCompare);
-            return new MtDiff(src, dst, store, executorService, configuration, labelConfiguration);
-        }
 
+            ((MtDiffOptimizedMatcher) matchers[1]).initMtDiff(executorService, configuration,
+                    labelConfiguration);
+        }
     }
 
     public static class Gt extends CompositeMatcher {
@@ -307,13 +311,13 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gt(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new GreedySubtreeMatcher(src, dst, store),
-                    new GreedyBottomUpMatcher(src, dst, store) });
+            super(src, dst, store, new Matcher[]{new GreedySubtreeMatcher(src, dst, store),
+                    new GreedyBottomUpMatcher(src, dst, store)});
         }
     }
 
@@ -322,15 +326,15 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta A.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gta(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new GreedySubtreeMatcher(src, dst, store),
-                            new GreedyBottomUpMatcher(src, dst, store) });
+                            new GreedyBottomUpMatcher(src, dst, store)});
         }
     }
 
@@ -339,13 +343,13 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta A-B.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gtab(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new GreedySubtreeMatcher(src, dst, store), new GreedyBottomUpMatcher(src, dst, store),
                             new LcsOptMatcher(src, dst, store)
 
@@ -358,13 +362,13 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta A-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gtabcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new GreedySubtreeMatcher(src, dst, store), new GreedyBottomUpMatcher(src, dst, store),
                             new LcsOptMatcher(src, dst, store),
                             new FineGrainedOptimizationsMatcher(src, dst, store)
@@ -378,15 +382,15 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta A, C-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gtacde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new GreedySubtreeMatcher(src, dst, store), new GreedyBottomUpMatcher(src, dst, store),
-                            new FineGrainedOptimizationsMatcher(src, dst, store) });
+                            new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
@@ -395,13 +399,13 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta B.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gtb(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new GreedySubtreeMatcher(src, dst, store),
-                    new GreedyBottomUpMatcher(src, dst, store), new LcsOptMatcher(src, dst, store) });
+            super(src, dst, store, new Matcher[]{new GreedySubtreeMatcher(src, dst, store),
+                    new GreedyBottomUpMatcher(src, dst, store), new LcsOptMatcher(src, dst, store)});
         }
     }
 
@@ -410,15 +414,15 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta B-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gtbcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new GreedySubtreeMatcher(src, dst, store),
+                    new Matcher[]{new GreedySubtreeMatcher(src, dst, store),
                             new GreedyBottomUpMatcher(src, dst, store), new LcsOptMatcher(src, dst, store),
-                            new FineGrainedOptimizationsMatcher(src, dst, store) });
+                            new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
@@ -427,15 +431,15 @@ public class OptimizedVersions {
         /**
          * Instantiates GumTree with Theta C-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Gtcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new GreedySubtreeMatcher(src, dst, store),
+                    new Matcher[]{new GreedySubtreeMatcher(src, dst, store),
                             new GreedyBottomUpMatcher(src, dst, store),
-                            new FineGrainedOptimizationsMatcher(src, dst, store) });
+                            new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
@@ -661,13 +665,13 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta A.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rteda(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
-                    new RtedMatcher(src, dst, store) });
+            super(src, dst, store, new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
+                    new RtedMatcher(src, dst, store)});
         }
     }
 
@@ -676,12 +680,12 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta A-B.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rtedab(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+            super(src, dst, store, new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                     new RtedMatcher(src, dst, store), new LcsOptMatcher(src, dst, store)
 
             });
@@ -693,13 +697,13 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta A-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rtedabcde(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+                    new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                             new RtedMatcher(src, dst, store), new LcsOptMatcher(src, dst, store),
                             new FineGrainedOptimizationsMatcher(src, dst, store)
 
@@ -712,12 +716,12 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta A, C-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rtedacde(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new IdenticalSubtreeMatcher(src, dst, store),
+            super(src, dst, store, new Matcher[]{new IdenticalSubtreeMatcher(src, dst, store),
                     new RtedMatcher(src, dst, store), new FineGrainedOptimizationsMatcher(src, dst, store)
 
             });
@@ -729,13 +733,13 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta B.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rtedb(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store,
-                    new Matcher[] { new RtedMatcher(src, dst, store), new LcsOptMatcher(src, dst, store) });
+                    new Matcher[]{new RtedMatcher(src, dst, store), new LcsOptMatcher(src, dst, store)});
         }
     }
 
@@ -744,12 +748,12 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta B-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rtedbcde(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new RtedMatcher(src, dst, store),
+            super(src, dst, store, new Matcher[]{new RtedMatcher(src, dst, store),
                     new LcsOptMatcher(src, dst, store), new FineGrainedOptimizationsMatcher(src, dst, store)
 
             });
@@ -761,13 +765,13 @@ public class OptimizedVersions {
         /**
          * Instantiates RTED with Theta C-E.
          *
-         * @param src the src
-         * @param dst the dst
+         * @param src   the src
+         * @param dst   the dst
          * @param store the store
          */
         public Rtedcde(ITree src, ITree dst, MappingStore store) {
-            super(src, dst, store, new Matcher[] { new RtedMatcher(src, dst, store),
-                    new FineGrainedOptimizationsMatcher(src, dst, store) });
+            super(src, dst, store, new Matcher[]{new RtedMatcher(src, dst, store),
+                    new FineGrainedOptimizationsMatcher(src, dst, store)});
         }
     }
 
