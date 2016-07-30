@@ -2,6 +2,8 @@ This is a fork of [Gumtree](https://github.com/GumTreeDiff/gumtree).
 
 It contains the MTDIFF implementation
 and several general optimizations for tree differencing algorithms.
+The data to the ASE 2016 publication "Move-Optimized Source Code Tree Differencing" is available
+in a separate [repository](https://github.com/FAU-Inf2/tree-measurements).
 
 ## Structure
 
