@@ -175,6 +175,20 @@ public class SimilarLeafExaminationRunnable implements Callable<Set<MatchingCand
                 }
                 tmp.put(mc.second, mc);
             }
+            for (MatchingCandidate mc : initialList) {
+
+              ConcurrentHashMap<ITree, MatchingCandidate> tmp =
+                  candidateMap.get(mc.first);
+              if (tmp == null) {
+                tmp = new ConcurrentHashMap<>();
+                ConcurrentHashMap<ITree, MatchingCandidate> tmp2 = 
+                    candidateMap.putIfAbsent(mc.first, tmp);
+                if (tmp2 != null) {
+                    tmp = tmp2;
+                }
+              }
+              tmp.put(mc.second, mc);
+            }
             for (int i = 0; i < oldNodes.size(); i++) {
                 firstAggregations[i] = oldNodes.get(i);
             }
