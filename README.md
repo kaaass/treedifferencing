@@ -18,7 +18,7 @@ Contains the new MTDIFF implementation.
 You can build the code with the following commands: 
 
 ```
-https://github.com/FAU-Inf2/treedifferencing.git
+git clone https://github.com/FAU-Inf2/treedifferencing.git
 cd treedifferencing
 ./gradlew build
 ```
