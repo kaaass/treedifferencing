@@ -9,3 +9,10 @@ dependencies {
 	compile 'org.eclipse.tycho:org.eclipse.jdt.core:3.11.0.v20150602-1242'
 
 }
+allprojects {
+	gradle.projectsEvaluated {
+		tasks.withType(JavaCompile) {
+			options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+		}
+	}
+}

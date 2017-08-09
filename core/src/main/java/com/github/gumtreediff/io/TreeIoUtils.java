@@ -121,41 +121,31 @@ public final class TreeIoUtils {
         public abstract void writeTo(Writer writer) throws Exception;
 
         public void writeTo(OutputStream writer) throws Exception {
-            OutputStreamWriter os = new OutputStreamWriter(writer);
-            try {
+            // FIXME Since the stream is already open, we should not close it, however due to semantic issue
+            // it should stay like this
+            try (OutputStreamWriter os = new OutputStreamWriter(writer)) {
                 writeTo(os);
-            } finally {
-                os.close();
             }
         }
 
         public String toString() {
-            StringWriter s = new StringWriter();
-            try {
+            try (StringWriter s = new StringWriter()) {
                 writeTo(s);
-                s.close(); // FIXME this is useless (do nothing) but
-                // throws an exception, thus I dont' put it in the finally block where it belongs
+                return s.toString();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            return s.toString();
         }
 
         public void writeTo(String file) throws Exception {
-            FileWriter w = new FileWriter(file);
-            try {
+            try (FileWriter w = new FileWriter(file)) {
                 writeTo(w);
-            } finally {
-                w.close();
             }
         }
 
         public void writeTo(File file) throws Exception {
-            FileWriter w = new FileWriter(file);
-            try {
+            try (FileWriter w = new FileWriter(file)) {
                 writeTo(w);
-            } finally {
-                w.close();
             }
         }
     }
@@ -195,7 +185,6 @@ public final class TreeIoUtils {
                     @Override
                     public void startTree(ITree tree) {
                         try {
-                            assert formatter != null;
                             assert tree != null;
                             formatter.startTree(tree);
                             writeAttributes(formatter, tree.getMetadata());
@@ -223,7 +212,6 @@ public final class TreeIoUtils {
         protected void writeAttributes(TreeFormatter formatter, Iterator<Entry<String, Object>> it) throws Exception {
             while (it.hasNext()) {
                 Entry<String, Object> entry = it.next();
-                String k = entry.getKey();
                 serializers.serialize(formatter, entry.getKey(), entry.getValue());
             }
         }
@@ -235,7 +223,7 @@ public final class TreeIoUtils {
 
         public TreeSerializer export(String... name) {
             for (String n: name)
-                serializers.add(n, x -> x.toString());
+                serializers.add(n, Object::toString);
             return this;
         }
     }
@@ -397,13 +385,9 @@ public final class TreeIoUtils {
             super(w, ctx);
 
             if (isSrc)
-                searchOther = (tree) -> {
-                    return m.hasSrc(tree) ? m.getDst(tree) : null;
-                };
+                searchOther = (tree) -> m.hasSrc(tree) ? m.getDst(tree) : null;
             else
-                searchOther = (tree) -> {
-                    return m.hasDst(tree) ? m.getSrc(tree) : null;
-                };
+                searchOther = (tree) -> m.hasDst(tree) ? m.getSrc(tree) : null;
         }
 
         interface SearchOther {
@@ -448,13 +432,18 @@ public final class TreeIoUtils {
 
         @Override
         public void startTree(ITree tree) throws XMLStreamException {
-            writer.writeStartElement(context.getTypeLabel(tree.getType()));
-            if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
+            if (tree.getChildren().size() == 0)
+                writer.writeEmptyElement(context.getTypeLabel(tree.getType()));
+            else
+                writer.writeStartElement(context.getTypeLabel(tree.getType()));
+            if (tree.hasLabel())
+                writer.writeAttribute("label", tree.getLabel());
         }
 
         @Override
         public void endTree(ITree tree) throws XMLStreamException {
-            writer.writeEndElement();
+            if (tree.getChildren().size() > 0)
+                writer.writeEndElement();
         }
     }
 
@@ -484,11 +473,8 @@ public final class TreeIoUtils {
             String pos = (ITree.NO_VALUE == tree.getPos() ? "" : String.format("(%d %d)",
                     tree.getPos(), tree.getLength()));
 
-            String matched = tree.isMatched() ? ":matched " : "";
-
-            writer.write(String.format("(%d %s %s %s(%s",
-                            tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()),
-                            matched, pos));
+            writer.write(String.format("(%d %s %s (%s",
+                            tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()), pos));
         }
 
         @Override
@@ -542,10 +528,7 @@ public final class TreeIoUtils {
                 label = label.replaceAll("\"", "").replaceAll("\\s", "").replaceAll("\\\\", "");
             if (label.length() > 30)
                 label = label.substring(0, 30);
-            writer.write(tree.getId() + " [label=\"" + label + "\"");
-            if (tree.isMatched())
-                writer.write(",style=filled,fillcolor=cadetblue1");
-            writer.write("];\n");
+            writer.write(tree.getId() + " [label=\"" + label + "\"];\n");
 
             if (tree.getParent() != null)
                 writer.write(tree.getParent().getId() + " -> " + tree.getId() + ";\n");
@@ -633,8 +616,8 @@ public final class TreeIoUtils {
         private static final String LENGTH = "length";
 
         static {
-            defaultUnserializers.add(POS, x -> Integer.parseInt(x));
-            defaultUnserializers.add(LENGTH, x -> Integer.parseInt(x));
+            defaultUnserializers.add(POS, Integer::parseInt);
+            defaultUnserializers.add(LENGTH, Integer::parseInt);
         }
 
         public XmlInternalGenerator() {
@@ -658,10 +641,10 @@ public final class TreeIoUtils {
 
                         ITree t = context.createTree(type,
                                 labelForAttribute(s, LABEL), labelForAttribute(s, TYPE_LABEL));
-
-                        Iterator<Attribute> it = s.getAttributes();
+                        // FIXME this iterator has no type, due to the API. We have to cast it later
+                        Iterator<?> it = s.getAttributes();
                         while (it.hasNext()) {
-                            Attribute a = it.next();
+                            Attribute a = (Attribute) it.next();
                             unserializers.load(t, a.getName().getLocalPart(), a.getValue());
                         }
 

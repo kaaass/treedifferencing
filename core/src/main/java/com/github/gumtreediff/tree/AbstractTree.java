@@ -27,21 +27,18 @@ import java.util.*;
 public abstract class AbstractTree implements ITree {
 
     protected int id;
-    protected ITree parent;
-    protected List<ITree> children;
-    protected int height;
-    protected int size;
-    protected int depth;
-    protected int hash;
-    protected boolean matched;
 
-    @Override
-    public boolean areDescendantsMatched() {
-        for (ITree c: getDescendants())
-            if (!c.isMatched())
-                return false;
-        return true;
-    }
+    protected ITree parent;
+
+    protected List<ITree> children;
+
+    protected int height;
+
+    protected int size;
+
+    protected int depth;
+
+    protected int hash;
 
     @Override
     public int getChildPosition(ITree child) {
@@ -51,15 +48,6 @@ public abstract class AbstractTree implements ITree {
     @Override
     public ITree getChild(int position) {
         return getChildren().get(position);
-    }
-
-    @Override
-    public String getChildrenLabels() {
-        StringBuffer b = new StringBuffer();
-        for (ITree child: getChildren())
-            if (!"".equals(child.getLabel()))
-                b.append(child.getLabel() + " ");
-        return b.toString().trim();
     }
 
     @Override
@@ -95,14 +83,6 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public List<ITree> getLeaves() {
-        List<ITree> leafs = new ArrayList<>();
-        for (ITree t: getTrees())
-            if (t.isLeaf()) leafs.add(t);
-        return leafs;
-    }
-
-    @Override
     public ITree getParent() {
         return parent;
     }
@@ -115,18 +95,13 @@ public abstract class AbstractTree implements ITree {
     @Override
     public List<ITree> getParents() {
         List<ITree> parents = new ArrayList<>();
-        if (getParent() == null) return parents;
+        if (getParent() == null)
+            return parents;
         else {
             parents.add(getParent());
             parents.addAll(getParent().getParents());
         }
         return parents;
-    }
-
-    @Override
-    public String getShortLabel() {
-        String lbl = getLabel();
-        return lbl.substring(0, Math.min(50, lbl.length()));
     }
 
     @Override
@@ -140,14 +115,14 @@ public abstract class AbstractTree implements ITree {
     }
 
     private String indent(ITree t) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (int i = 0; i < t.getDepth(); i++)
             b.append("\t");
         return b.toString();
     }
 
     @Override
-    public boolean isClone(ITree tree) {
+    public boolean isIsomorphicTo(ITree tree) {
         if (this.getHash() != tree.getHash())
             return false;
         else
@@ -155,7 +130,7 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public boolean isCompatible(ITree t) {
+    public boolean hasSameType(ITree t) {
         return getType() == t.getType();
     }
 
@@ -165,24 +140,16 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public boolean isMatchable(ITree t) {
-        return isCompatible(t) && !(isMatched()  || t.isMatched());
-    }
-
-    @Override
-    public boolean isMatched() {
-        return matched;
-    }
-
-    @Override
     public boolean isRoot() {
         return getParent() == null;
     }
 
     @Override
-    public boolean isSimilar(ITree t) {
-        if (!isCompatible(t)) return false;
-        else if (!getLabel().equals(t.getLabel())) return false;
+    public boolean hasSameTypeAndLabel(ITree t) {
+        if (!hasSameType(t))
+            return false;
+        else if (!getLabel().equals(t.getLabel()))
+            return false;
         return true;
     }
 
@@ -254,18 +221,13 @@ public abstract class AbstractTree implements ITree {
     }
 
     @Override
-    public void setMatched(boolean matched) {
-        this.matched = matched;
-    }
-
-    @Override
     public void setSize(int size) {
         this.size = size;
     }
 
     @Override
     public String toStaticHashString() {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append(OPEN_SYMBOL);
         b.append(this.toShortString());
         for (ITree c: this.getChildren())
@@ -287,18 +249,18 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public String toTreeString() {
-        StringBuffer b = new StringBuffer();
-        for (ITree t : TreeUtils.preOrder(this)) b.append(indent(t) + t.toShortString() + "\n");
+        StringBuilder b = new StringBuilder();
+        for (ITree t : TreeUtils.preOrder(this))
+            b.append(indent(t) + t.toShortString() + "\n");
         return b.toString();
     }
 
     @Override
     public String toPrettyString(TreeContext ctx) {
-        if (hasLabel()) {
+        if (hasLabel())
             return ctx.getTypeLabel(this) + ": " + getLabel();
-        } else {
+        else
             return ctx.getTypeLabel(this);
-        }
     }
 
     public static class FakeTree extends AbstractTree {
@@ -313,6 +275,11 @@ public abstract class AbstractTree implements ITree {
 
         @Override
         public void addChild(ITree t) {
+            throw unsupportedOperation();
+        }
+
+        @Override
+        public void insertChild(ITree t, int position) {
             throw unsupportedOperation();
         }
 

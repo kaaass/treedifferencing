@@ -82,7 +82,7 @@ public class ChangeDistillerParallelLeavesMatcher extends Matcher {
             for (int i = start; i < srcLeaves.size(); i += cores) {
                 ITree srcLeaf = srcLeaves.get(i);
                 for (ITree dstLeaf : dstLeaves) {
-                    if (srcLeaf.isMatchable(dstLeaf)) {
+                    if (isMappingAllowed(srcLeaf, dstLeaf)) {
                         double sim = 0f;
                         // TODO: Use a unique string instead of @@
                         if (cacheResults.containsKey(srcLeaf.getLabel() + "@@" + dstLeaf.getLabel())) {

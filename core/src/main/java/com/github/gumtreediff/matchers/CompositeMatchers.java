@@ -20,20 +20,19 @@
 
 package com.github.gumtreediff.matchers;
 
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.XyBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerBottomUpMatcher;
-import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.CliqueSubtreeMatcher;
-import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
 import com.github.gumtreediff.tree.ITree;
 
 public class CompositeMatchers {
-    @Register(id = "gumtree", defaultMatcher = true)
+
+    @Register(id = "gumtree", defaultMatcher = true, priority = Registry.Priority.HIGH)
     public static class ClassicGumtree extends CompositeMatcher {
 
         public ClassicGumtree(ITree src, ITree dst, MappingStore store) {
@@ -45,9 +44,9 @@ public class CompositeMatchers {
     }
 
     @Register(id = "gumtree-complete")
-    public static class CompleteGumtreeMatche extends CompositeMatcher {
+    public static class CompleteGumtreeMatcher extends CompositeMatcher {
 
-        public CompleteGumtreeMatche(ITree src, ITree dst, MappingStore store) {
+        public CompleteGumtreeMatcher(ITree src, ITree dst, MappingStore store) {
             super(src, dst, store, new Matcher[]{
                     new CliqueSubtreeMatcher(src, dst, store),
                     new CompleteBottomUpMatcher(src, dst, store)
@@ -55,7 +54,7 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "change-distiller", defaultMatcher = true)
+    @Register(id = "change-distiller")
     public static class ChangeDistiller extends CompositeMatcher {
 
         public ChangeDistiller(ITree src, ITree dst, MappingStore store) {
@@ -66,7 +65,7 @@ public class CompositeMatchers {
         }
     }
 
-    @Register(id = "xy", defaultMatcher = true)
+    @Register(id = "xy")
     public static class XyMatcher extends CompositeMatcher {
 
         public XyMatcher(ITree src, ITree dst, MappingStore store) {

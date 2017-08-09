@@ -89,14 +89,12 @@ public class FineGrainedOptimizationsMatcher extends Matcher {
         List<ITree> unmatchedNodes2 = new LinkedList<>();
 
         for (ITree node : allNodesSrc) {
-
-            if (!node.isMatched()) {
+            if (mappings.hasSrc(node)) {
                 unmatchedNodes1.add(node);
             }
         }
         for (ITree node : allNodesDst) {
-            if (!node.isMatched()) {
-
+            if (mappings.hasDst(node)) {
                 unmatchedNodes2.add(node);
             }
         }

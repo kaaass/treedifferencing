@@ -20,32 +20,29 @@
 
 package com.github.gumtreediff.matchers.heuristic.gt;
 
-import com.github.gumtreediff.algo.HungarianAlgorithm;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.MultiMappingStore;
-import com.github.gumtreediff.algo.HungarianAlgorithm;
+import com.github.gumtreediff.utils.HungarianAlgorithm;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.MultiMappingStore;
 import com.github.gumtreediff.tree.ITree;
 
 import java.util.*;
 
-public class HungarianSubtreeMatcher extends SubtreeMatcher {
+public class HungarianSubtreeMatcher extends AbstractSubtreeMatcher {
 
     public HungarianSubtreeMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
     }
 
-    public void filterMappings(MultiMappingStore mmappings) {
+    public void filterMappings(MultiMappingStore multiMappings) {
         List<MultiMappingStore> ambiguousList = new ArrayList<>();
         Set<ITree> ignored = new HashSet<>();
-        for (ITree src: mmappings.getSrcs())
-            if (mmappings.isSrcUnique(src))
-                addFullMapping(src, mmappings.getDst(src).iterator().next());
+        for (ITree src: multiMappings.getSrcs())
+            if (multiMappings.isSrcUnique(src))
+                addMappingRecursively(src, multiMappings.getDst(src).iterator().next());
             else if (!ignored.contains(src)) {
                 MultiMappingStore ambiguous = new MultiMappingStore();
-                Set<ITree> adsts = mmappings.getDst(src);
-                Set<ITree> asrcs = mmappings.getSrc(mmappings.getDst(src).iterator().next());
+                Set<ITree> adsts = multiMappings.getDst(src);
+                Set<ITree> asrcs = multiMappings.getSrc(multiMappings.getDst(src).iterator().next());
                 for (ITree asrc : asrcs)
                     for (ITree adst: adsts)
                         ambiguous.link(asrc ,adst);
@@ -68,7 +65,7 @@ public class HungarianSubtreeMatcher extends SubtreeMatcher {
             int[] solutions = hgAlg.execute();
             for (int i = 0; i < solutions.length; i++) {
                 int dstIdx = solutions[i];
-                if (dstIdx != -1) addFullMapping(lstSrcs.get(i), lstDsts.get(dstIdx));
+                if (dstIdx != -1) addMappingRecursively(lstSrcs.get(i), lstDsts.get(dstIdx));
             }
         }
     }

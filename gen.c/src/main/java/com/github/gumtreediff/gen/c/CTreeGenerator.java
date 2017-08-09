@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 @Register(id = "c-cocci", accept = "\\.[ch]$")
 public class CTreeGenerator extends TreeGenerator {
 
-    private static final String COCCI_CMD = "cgum";
+    private static final String COCCI_CMD = System.getProperty("gumtree.cgum.path", "cgum");
 
     private static final MetadataSerializers defaultSerializers = new MetadataSerializers();
     private static final MetadataUnserializers defaultUnserializers = new MetadataUnserializers();
@@ -56,7 +56,6 @@ public class CTreeGenerator extends TreeGenerator {
     public TreeContext generate(Reader r) throws IOException {
         //FIXME this is not efficient but I am not sure how to speed up things here.
         File f = File.createTempFile("gumtree", ".c");
-        System.out.println(f.getAbsolutePath());
         FileWriter w = new FileWriter(f);
         BufferedReader br = new BufferedReader(r);
         String line = br.readLine();
@@ -78,7 +77,10 @@ public class CTreeGenerator extends TreeGenerator {
             while ((line = br.readLine()) != null)
                 buf.append(line + "\n");
             p.waitFor();
-            if (p.exitValue() != 0)  throw new RuntimeException();
+            if (p.exitValue() != 0)
+                throw new RuntimeException(
+                    String.format("cgum Error [%d] %s\n", p.exitValue(), buf.toString())
+                );
             r.close();
             String xml = buf.toString();
             return TreeIoUtils.fromXml(CTreeGenerator.defaultUnserializers).generateFromString(xml);

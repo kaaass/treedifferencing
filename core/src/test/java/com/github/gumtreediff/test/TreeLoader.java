@@ -22,7 +22,7 @@ package com.github.gumtreediff.test;
 
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Pair;
+import com.github.gumtreediff.utils.Pair;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.io.IOException;
@@ -35,8 +35,8 @@ public class TreeLoader {
         return new Pair<>(load("/action_v0.xml"), load("/action_v1.xml"));
     }
 
-    public static Pair<TreeContext, TreeContext> getCdCustomPair() {
-        return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
+    public static Pair<TreeContext, TreeContext> getGumtreePair() {
+        return new Pair<>(load("/gumtree_v0.xml"), load("/gumtree_v1.xml"));
     }
 
     public static Pair<TreeContext, TreeContext> getZsCustomPair() {
@@ -51,6 +51,10 @@ public class TreeLoader {
         return new Pair<>(load("/Dummy_v0.xml"), load("/Dummy_v1.xml"));
     }
 
+    public static Pair<TreeContext, TreeContext> getCdCustomPair() {
+        return new Pair<>(load("/cd_v0.xml"), load("/cd_v1.xml"));
+    }
+ 
     public static ITree getDummySrc() {
         return load("/Dummy_v0.xml").getRoot();
     }

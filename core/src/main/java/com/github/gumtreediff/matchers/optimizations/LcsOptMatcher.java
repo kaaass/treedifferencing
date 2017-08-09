@@ -54,12 +54,12 @@ public class LcsOptMatcher extends Matcher {
         Set<ITree> unmatchedNodes1 = new HashSet<>();
         Set<ITree> unmatchedNodes2 = new HashSet<>();
         for (ITree node : allNodesSrc) {
-            if (!node.isMatched()) {
+            if (!mappings.hasSrc(node)) {
                 unmatchedNodes1.add(node);
             }
         }
         for (ITree node : allNodesDst) {
-            if (!node.isMatched()) {
+            if (!mappings.hasDst(node)) {
                 unmatchedNodes2.add(node);
             }
         }
@@ -145,7 +145,7 @@ public class LcsOptMatcher extends Matcher {
             for (ITree child : tree.getChildren()) {
                 getNodeListInPostOrder(child, nodes);
             }
-            if (!tree.isMatched()) {
+            if (!mappings.hasSrc(tree) && ! mappings.hasDst(tree)) {
                 nodes.add(tree);
             }
         }

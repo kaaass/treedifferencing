@@ -20,7 +20,7 @@ You can build the code with the following commands:
 ```
 git clone https://github.com/FAU-Inf2/treedifferencing.git
 cd treedifferencing
-./gradlew build
+./gradlew build -x test
 ```
 You will have a `tar.gz` distribution of GumTree in the `dist/build/distributions` folder. Unzip the archive.
 

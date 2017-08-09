@@ -22,14 +22,12 @@ package com.github.gumtreediff.tree;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.Mapping;
+import com.github.gumtreediff.utils.Pair;
 
 public final class TreeUtils {
 
@@ -323,53 +321,5 @@ public final class TreeUtils {
 
     public static void postOrderNumbering(ITree tree) {
         numbering(tree.postOrder());
-    }
-
-    public static void removeMapped(Collection<? extends Mapping> mappings) {
-        Iterator<? extends Mapping> trIt = mappings.iterator();
-        while (trIt.hasNext()) {
-            Mapping t = trIt.next();
-            if (t.getFirst().isMatched() || t.getSecond().isMatched()) trIt.remove();
-        }
-    }
-
-    public static List<ITree> removeMapped(List<ITree> trees) {
-        Iterator<ITree> trIt = trees.iterator();
-        while (trIt.hasNext()) {
-            ITree t = trIt.next();
-            if (t.isMatched()) trIt.remove();
-        }
-        return trees;
-    }
-
-    /**
-     * Remove mapped nodes from the tree. Be careful this method will invalidate
-     * all the metrics of this tree and its descendants. If you need them, you need
-     * to recompute them.
-     */
-    public static ITree removeMatched(ITree tree) {
-        for (ITree t: tree.getTrees()) {
-            if (t.isMatched()) {
-                if (t.getParent() != null) t.getParent().getChildren().remove(t);
-                t.setParent(null);
-            }
-        }
-        tree.refresh();
-        return tree;
-    }
-
-    /**
-     * Remove mapped nodes from the tree. Be careful this method will invalidate
-     * all the metrics of this tree and its descendants. If you need them, you need
-     * to recompute them.
-     */
-    public static ITree removeCompletelyMapped(ITree tree) {
-        for (ITree t: tree.getTrees()) {
-            if (t.isMatched() && t.areDescendantsMatched()) {
-                t.getParent().getChildren().remove(t);
-                t.setParent(null);
-            }
-        }
-        return tree;
     }
 }

@@ -22,7 +22,6 @@ package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Client;
-import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
@@ -35,15 +34,15 @@ import java.util.ArrayList;
 public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> extends Client {
 
     protected final O opts;
-    public static final String SYNTAX = "Syntax: diff [options] fileSrc fileDst";
+    public static final String SYNTAX = "Syntax: diff [options] baseFile destFile";
     private TreeContext src;
     private TreeContext dst;
 
     public static class Options implements Option.Context {
-        protected String matcher;
-        protected ArrayList<String> generators = new ArrayList<>();
-        protected String src;
-        protected String dst;
+        public String matcher;
+        public ArrayList<String> generators = new ArrayList<>();
+        public String src;
+        public String dst;
 
         @Override
         public Option[] values() {
@@ -123,7 +122,11 @@ public abstract class AbstractDiffClient<O extends AbstractDiffClient.Options> e
 
     private TreeContext getTreeContext(String file) {
         try {
-            TreeContext t = Generators.getInstance().getTree(file);
+            TreeContext t;
+            if (opts.generators.isEmpty())
+                t = Generators.getInstance().getTree(file);
+            else
+                t = Generators.getInstance().getTree(opts.generators.get(0), file);
             return t;
         } catch (IOException e) {
             e.printStackTrace();

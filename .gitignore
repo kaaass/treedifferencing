@@ -7,3 +7,6 @@ samples/
 .metadata/
 .idea/
 *.iml
+.gradle/
+build/
+.vagrant/

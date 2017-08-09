@@ -424,7 +424,7 @@ public class CdJdtVisitor extends AbstractJdtVisitor {
     public boolean visit(CatchClause node) {
         if (node.getException().getType() instanceof SimpleType) {
             pushNode(node, ((SimpleType) node.getException().getType()).getName().getFullyQualifiedName());
-    	} else {
+        } else {
             pushNode(node, ((UnionType) node.getException().getType()).toString());
         }
         // since exception type is used as value, visit children by hand
