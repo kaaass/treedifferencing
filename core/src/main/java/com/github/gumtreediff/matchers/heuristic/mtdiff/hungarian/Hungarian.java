@@ -1,21 +1,22 @@
 /*
  * This file is part of GumTree.
  *
- * GumTree is free software: you can redistribute it and/or modify it under the terms of the GNU
- * Lesser General Public License as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
- * General Public License for more details.
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
- * not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
  * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
-*/
+ */
 
 package com.github.gumtreediff.matchers.heuristic.mtdiff.hungarian;
 
@@ -37,10 +38,10 @@ public final class Hungarian {
         }
     }
 
-    private static final double EPSILON = 1e-12;
+    private static final double EPSILON = 1e-8;
 
     private static void addSmallest(final DoubleMatrix matrix, final ByteMatrix mask,
-                                    final boolean[] rowCover, final boolean[] colCover) {
+            final boolean[] rowCover, final boolean[] colCover) {
         // Step 6
         final int n = matrix.numRows();
 
@@ -59,7 +60,8 @@ public final class Hungarian {
     }
 
     private static void alternatingSeries(final DoubleMatrix matrix, final ByteMatrix mask,
-              final boolean[] rowCover, final boolean[] colCover, final int pathRow0, final int pathCol0) {
+            final boolean[] rowCover, final boolean[] colCover, final int pathRow0,
+            final int pathCol0) {
         // Step 5
         final ArrayList<Pair> path = new ArrayList<>();
         int pathCount = 1;
@@ -82,7 +84,8 @@ public final class Hungarian {
                 pathCount += 1;
                 path.add(new Pair(ivar, jvar));
             }
-        } while (!done);
+        } 
+        while (!done);
 
         augmentPath(mask, pathCount, path);
         clearCovers(rowCover, colCover);
@@ -116,7 +119,7 @@ public final class Hungarian {
     }
 
     private static void augmentPath(final ByteMatrix mask, final int pathCount,
-                                    final ArrayList<Pair> path) {
+            final ArrayList<Pair> path) {
         for (int p = 0; p < pathCount; ++p) {
             final Pair pathElem = path.get(p);
             if (mask.get(pathElem.row, pathElem.col) == 1) {
@@ -135,7 +138,7 @@ public final class Hungarian {
     }
 
     private static void coverColumns(final DoubleMatrix matrix, final ByteMatrix mask,
-                                     final boolean[] rowCover, final boolean[] colCover) {
+            final boolean[] rowCover, final boolean[] colCover) {
         // Step 3
         final int n = matrix.numRows();
 
@@ -173,7 +176,7 @@ public final class Hungarian {
 
     // == Helpers ==
     private static Pair findAZero(final DoubleMatrix matrix, final ByteMatrix mask,
-                                  final boolean[] rowCover, final boolean[] colCover) {
+            final boolean[] rowCover, final boolean[] colCover) {
         final int n = matrix.numRows();
 
         int ivar = 0;
@@ -192,13 +195,14 @@ public final class Hungarian {
             if (ivar >= n) {
                 done = true;
             }
-        } while (!done);
+        } 
+        while (!done);
 
         return new Pair(row, col);
     }
 
     private static void findNonCovered(final DoubleMatrix matrix, final ByteMatrix mask,
-                                       final boolean[] rowCover, final boolean[] colCover) {
+            final boolean[] rowCover, final boolean[] colCover) {
         // Step 4
         int row = -1;
         int col = -1;
@@ -223,7 +227,8 @@ public final class Hungarian {
                 }
             }
 
-        } while (!done);
+        }
+        while (!done);
     }
 
     private static int findPrimeInRow(final ByteMatrix mask, final int row) {
@@ -231,7 +236,7 @@ public final class Hungarian {
     }
 
     private static double findSmallest(final DoubleMatrix matrix, final boolean[] rowCover,
-                                       final boolean[] colCover) {
+            final boolean[] colCover) {
         final int n = matrix.numRows();
 
         double minValue = Double.MAX_VALUE;
@@ -346,6 +351,5 @@ public final class Hungarian {
         }
     }
 
-    private Hungarian() {
-    }
+    private Hungarian() {}
 }

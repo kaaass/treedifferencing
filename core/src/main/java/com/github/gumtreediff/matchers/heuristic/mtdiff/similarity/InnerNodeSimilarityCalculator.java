@@ -141,9 +141,6 @@ public class InnerNodeSimilarityCalculator {
                 }
             }
         }
-        if (common > max) {
-            System.err.println("what?");
-        }
         assert common <= max;
         float tmp = 0.0f;
         for (int i = 0; i < firstDclists.length; i++) {

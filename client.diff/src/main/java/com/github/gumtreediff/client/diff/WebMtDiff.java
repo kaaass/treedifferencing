@@ -18,11 +18,15 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package com.github.gumtreediff.client.diff.web;
+package com.github.gumtreediff.client.diff;
 
 import com.github.gumtreediff.client.Option;
 import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
+import com.github.gumtreediff.client.diff.web.DiffView;
+import com.github.gumtreediff.client.diff.web.DirectoryComparatorView;
+import com.github.gumtreediff.client.diff.web.MergelyView;
+import com.github.gumtreediff.client.diff.web.ScriptView;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.io.DirectoryComparator;
 import com.github.gumtreediff.matchers.Matchers;
@@ -39,7 +43,8 @@ import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
-@Register(description = "a web diff client with MTDIFF", options = WebMtDiff.Options.class, priority = Registry.Priority.HIGH)
+@Register(description = "a web diff client with MTDIFF", options = WebMtDiff.Options.class,
+        priority = Registry.Priority.HIGH)
 public class WebMtDiff extends AbstractDiffClient<WebMtDiff.Options> {
 
     public WebMtDiff(String[] args) {
@@ -80,12 +85,13 @@ public class WebMtDiff extends AbstractDiffClient<WebMtDiff.Options> {
 
     @Override
     public void run() {
-	Matchers.getMtDiffInstance();
+        Matchers.getMtDiffInstance();
         DirectoryComparator comparator = new DirectoryComparator(opts.src, opts.dst);
         comparator.compare();
         configureSpark(comparator, opts.defaultPort);
         Spark.awaitInitialization();
-        System.out.println(String.format("Starting server: %s:%d", "http://127.0.0.1", opts.defaultPort));
+        System.out
+            .println(String.format("Starting server: %s:%d", "http://127.0.0.1", opts.defaultPort));
     }
 
     public static void configureSpark(final DirectoryComparator comparator, int port) {

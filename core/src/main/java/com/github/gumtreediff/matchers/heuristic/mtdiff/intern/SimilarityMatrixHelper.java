@@ -1,21 +1,22 @@
 /*
  * This file is part of GumTree.
  *
- * GumTree is free software: you can redistribute it and/or modify it under the terms of the GNU
- * Lesser General Public License as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
- * General Public License for more details.
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
- * not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
  * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
-*/
+ */
 
 package com.github.gumtreediff.matchers.heuristic.mtdiff.intern;
 
@@ -31,6 +32,8 @@ import com.github.gumtreediff.matchers.heuristic.mtdiff.similarity.NGramCalculat
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -77,10 +80,10 @@ class SimilarityMatrixHelper {
                 final double value = similarityValues[row][column];
 
                 if (max != min) {
-                    final double newSimilarityValue = (value - min) / (max - min) * 1000;
+                    final double newSimilarityValue = (value - min) / (max - min) * 1000000;
                     similarityValues[row][column] = newSimilarityValue;
                 } else {
-                    similarityValues[row][column] = 1000;
+                    similarityValues[row][column] = 1000000;
                 }
 
             }
@@ -121,22 +124,22 @@ class SimilarityMatrixHelper {
     private double weightPosition;
     private double weightSimilarity;
 
-    SimilarityMatrixHelper(boolean[][] aggregationFinished,
-               ITree[] firstAggregations, ITree[] secondAggregations,
-               ConcurrentHashMap<ITree, MatchingCandidate> currentResultMap, AtomicBoolean changed,
-               ArrayList<ITree> oldNodes, ArrayList<ITree> newNodes,
-               IdentityHashMap<ITree, Mapping> resultMap, NGramCalculator stringSim,
-               ConcurrentHashMap<String, Float> stringSimCache, boolean onlyOneClassPair,
-               double[][] similarityScores, ConcurrentSkipListSet<MatchingCandidate> initialList,
-               ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, MatchingCandidate>> candidateMap,
-               AtomicIntegerArray foundMaxArray,
-               ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, Float>> similarityCache,
-               AtomicLong similarityEntries, Map<ITree, ITree> parents1, Map<ITree, ITree> parents2,
-               Map<ITree, ArrayList<ITree>> leavesMap1, Map<ITree, ArrayList<ITree>> leavesMap2,
-               LabelConfiguration labelConfiguration, LMatcher leafMatcher,
-               Map<ITree, ArrayList<ITree>> directChildrenMap1,
-               Map<ITree, ArrayList<ITree>> directChildrenMap2, ITree root1, ITree root2,
-               double weightSimilarity, double weightPosition) {
+    SimilarityMatrixHelper(boolean[][] aggregationFinished, ITree[] firstAggregations,
+            ITree[] secondAggregations,
+            ConcurrentHashMap<ITree, MatchingCandidate> currentResultMap, AtomicBoolean changed,
+            ArrayList<ITree> oldNodes, ArrayList<ITree> newNodes,
+            IdentityHashMap<ITree, Mapping> resultMap, NGramCalculator stringSim,
+            ConcurrentHashMap<String, Float> stringSimCache, boolean onlyOneClassPair,
+            double[][] similarityScores, ConcurrentSkipListSet<MatchingCandidate> initialList,
+            ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, MatchingCandidate>> candidateMap,
+            AtomicIntegerArray foundMaxArray,
+            ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, Float>> similarityCache,
+            AtomicLong similarityEntries, Map<ITree, ITree> parents1, Map<ITree, ITree> parents2,
+            Map<ITree, ArrayList<ITree>> leavesMap1, Map<ITree, ArrayList<ITree>> leavesMap2,
+            LabelConfiguration labelConfiguration, LMatcher leafMatcher,
+            Map<ITree, ArrayList<ITree>> directChildrenMap1,
+            Map<ITree, ArrayList<ITree>> directChildrenMap2, ITree root1, ITree root2,
+            double weightSimilarity, double weightPosition) {
 
         this.aggregationFinished = aggregationFinished;
         this.firstAggregations = firstAggregations;
@@ -216,7 +219,6 @@ class SimilarityMatrixHelper {
                         for (int j = 0; j < newNodes.size(); j++) {
                             if (similarityScores[i][j] < maxValue) {
                                 aggregationFinished[i][j] = true;
-                                ;
                             }
                         }
                     }
@@ -244,7 +246,8 @@ class SimilarityMatrixHelper {
                 }
                 for (int i = 0; i < oldNodes.size(); i++) {
                     if (firstAggregations[i] != null) {
-                        NodeAggregation tmp = createAggregation((ITree) firstAggregations[i], parents1);
+                        NodeAggregation tmp =
+                                createAggregation((ITree) firstAggregations[i], parents1);
                         if (tmp == null) {
                             for (int j = 0; j < newNodes.size(); j++) {
                                 if (!aggregationFinished[i][j]) {
@@ -258,7 +261,8 @@ class SimilarityMatrixHelper {
 
                 for (int j = 0; j < newNodes.size(); j++) {
                     if (secondAggregations[j] != null) {
-                        NodeAggregation tmp = createAggregation((ITree) secondAggregations[j], parents2);
+                        NodeAggregation tmp =
+                                createAggregation((ITree) secondAggregations[j], parents2);
                         if (tmp == null) {
                             for (int i = 0; i < oldNodes.size(); i++) {
                                 if (!aggregationFinished[i][j]) {
@@ -271,18 +275,37 @@ class SimilarityMatrixHelper {
                 }
                 for (int i = 0; i < oldNodes.size(); i++) {
                     updateSimilarityRow(aggregationFinished, similarityScores, firstAggregations,
-                            secondAggregations, currentResultMap, changed, i, newNodes, onlyOneClassPair,
-                            resultMap, stringSim, stringSimCache, similarityCache, similarityEntries);
+                            secondAggregations, currentResultMap, changed, i, newNodes,
+                            onlyOneClassPair, resultMap, stringSim, stringSimCache, similarityCache,
+                            similarityEntries);
                 }
             }
             DoubleMatrix matrix = DoubleMatrix.newMatrix(Math.max(oldNodes.size(), newNodes.size()),
                     Math.max(oldNodes.size(), newNodes.size()));
             int maxDiff = Integer.MIN_VALUE;
             double[][] posDiff = new double[oldNodes.size()][newNodes.size()];
+            ArrayList<ITree> oldNodesSorted = new ArrayList<>(oldNodes);
+            Collections.sort(oldNodesSorted, new IdComparator());
+            HashMap<ITree, Integer> oldRankMap = new HashMap<>();
+            int rank = 0;
+            for (ITree node : oldNodesSorted) {
+                oldRankMap.put(node, rank);
+                rank++;
+            }
+            ArrayList<ITree> newNodesSorted = new ArrayList<>(newNodes);
+            Collections.sort(newNodesSorted, new IdComparator());
+            HashMap<ITree, Integer> newRankMap = new HashMap<>();
+            rank = 0;
+            for (ITree node : newNodesSorted) {
+                newRankMap.put(node, rank);
+                rank++;
+            }
+
             for (int i = 0; i < oldNodes.size(); i++) {
                 for (int j = 0; j < newNodes.size(); j++) {
                     if (root1.getId() > oldNodes.get(i).getId()) {
-                        int val = Math.abs(oldNodes.get(i).getId() - newNodes.get(j).getId());
+                        int val = Math.abs(
+                                oldRankMap.get(oldNodes.get(i)) - newRankMap.get(newNodes.get(j)));
                         posDiff[i][j] = val;
                         if (val > maxDiff) {
                             maxDiff = val;
@@ -297,15 +320,10 @@ class SimilarityMatrixHelper {
                     }
                 }
             }
-            for (int i = 0; i < oldNodes.size(); i++) {
-                for (int j = 0; j < newNodes.size(); j++) {
-                    posDiff[i][j] = posDiff[i][j];
-                }
-            }
             double defaultValue = 0;
             if (newNodes.size() > oldNodes.size()) {
-                defaultValue = matrix.numRows() * matrix.numCols() * weightSimilarity
-                        + matrix.numRows() * matrix.numCols() * weightPosition;
+                defaultValue = matrix.numRows() * matrix.numCols() * weightSimilarity * 1000000
+                        + matrix.numRows() * matrix.numCols() * weightPosition * 1000000;
             }
             for (int i = 0; i < matrix.numRows(); i++) {
                 for (int j = 0; j < matrix.numCols(); j++) {
@@ -336,22 +354,50 @@ class SimilarityMatrixHelper {
             double[][] posDiffTransformed = performTransformation(posDiff);
             for (int i = 0; i < oldNodes.size(); i++) {
                 for (int j = 0; j < newNodes.size(); j++) {
-                    double val = ((1000 - similarityScoresTransformed[i][j]) * weightSimilarity)
+                    double val = ((1000000 - similarityScoresTransformed[i][j]) * weightSimilarity)
                             + posDiffTransformed[i][j] * weightPosition;
                     matrix.set(i, j, val);
                 }
             }
 
-            int[] res = Hungarian.assign(matrix);
+
+            int[] res = null;
+            if (Math.abs(oldNodes.size() - newNodes.size()) > 2500 || oldNodes.size() > 1000
+                    || newNodes.size() > 1000) {
+                res = new int[oldNodes.size()];
+                HashSet<Integer> alreadyDone = new HashSet<>();
+                for (int i = 0; i < oldNodes.size(); i++) {
+                    double min = Double.MAX_VALUE;
+                    int index = -1;
+                    for (int j = 0; j < newNodes.size(); j++) {
+                        if (matrix.get(i, j) < min && !alreadyDone.contains(j)) {
+                            min = matrix.get(i, j);
+                            index = j;
+                            if (min == 0) {
+                                break;
+                            }
+                        }
+                    }
+                    if (min != Double.MAX_VALUE) {
+                        res[i] = index;
+                        alreadyDone.add(index);
+                    }
+                }
+            } else {
+                res = Hungarian.assign(matrix);
+            }
             initialList.clear();
 
             for (int i = 0; i < oldNodes.size(); i++) {
                 if (res[i] < newNodes.size()) {
-                    if (!(skipList.contains(oldNodes.get(i)) || skipList.contains(newNodes.get(res[i])))) {
+                    if (!(skipList.contains(oldNodes.get(i))
+                            || skipList.contains(newNodes.get(res[i])))) {
                         if (candidateMap.get(oldNodes.get(i)).get(newNodes.get(res[i])) != null) {
-                            initialList.add(candidateMap.get(oldNodes.get(i)).get(newNodes.get(res[i])));
+                            initialList.add(
+                                    candidateMap.get(oldNodes.get(i)).get(newNodes.get(res[i])));
                         } else {
-                            initialList.add(new MatchingCandidate(oldNodes.get(i), newNodes.get(res[i]), 0.0f));
+                            initialList.add(new MatchingCandidate(oldNodes.get(i),
+                                    newNodes.get(res[i]), 0.0f));
                         }
                     }
 
@@ -364,10 +410,11 @@ class SimilarityMatrixHelper {
     }
 
     /**
-     * Creates a NodeAggregation that consists of the specified node, it's
-     * parent and all of it's siblings.
+     * Creates a NodeAggregation that consists of the specified node, it's parent and all of it's
+     * siblings.
      */
-    private NodeAggregation createAggregation(final ITree node, final Map<ITree, ITree> parentsMap) {
+    private NodeAggregation createAggregation(final ITree node,
+            final Map<ITree, ITree> parentsMap) {
         if (node.getType() == NODE_AGGREGATION_LABEL) {
             final NodeAggregation aggregation = (NodeAggregation) node;
             final ITree parent = parentsMap.get(aggregation.getAssociatedTree());
@@ -392,9 +439,9 @@ class SimilarityMatrixHelper {
      * A similarity calculation based on a simplified ChangeDistiller matching.
      */
     private float simpleSimilarity(final ITree tree1, final ITree tree2,
-               ConcurrentHashMap<String, Float> stringSimCache, boolean onlyOneClassPair,
-               IdentityHashMap<ITree, Mapping> resultMap, NGramCalculator stringSim,
-               ConcurrentHashMap<ITree, MatchingCandidate> currentMatchings) {
+            ConcurrentHashMap<String, Float> stringSimCache, boolean onlyOneClassPair,
+            IdentityHashMap<ITree, Mapping> resultMap, NGramCalculator stringSim,
+            ConcurrentHashMap<ITree, MatchingCandidate> currentMatchings) {
 
         float similarity = 0.0f;
         if (tree1.getType() == labelConfiguration.rootLabel
@@ -501,20 +548,24 @@ class SimilarityMatrixHelper {
                 ArrayList<MatchingCandidate> canlist = new ArrayList<>();
                 for (final ITree secondNode : subLeaves2) {
                     float sim = Float.MIN_VALUE;
-                    if (tag == labelConfiguration.identifierLabel) {
+                    if (labelConfiguration.labelsForStringCompare.contains(tag)) {
                         if (firstNode.getLabel() == null || secondNode.getLabel() == null) {
                             sim = 0.0f;
                         } else if (firstNode.getLabel().equals(secondNode.getLabel())) {
                             sim = 1.0f;
                         } else {
 
-                            if (stringSimCache.get(firstNode.getLabel() + "@@" + secondNode.getLabel()) != null) {
-                                sim = stringSimCache.get(firstNode.getLabel() + "@@" + secondNode.getLabel());
-                            } else if (stringSimCache
-                                    .get(secondNode.getLabel() + "@@" + firstNode.getLabel()) != null) {
-                                sim = stringSimCache.get(secondNode.getLabel() + "@@" + firstNode.getLabel());
+                            if (stringSimCache.get(
+                                    firstNode.getLabel() + "@@" + secondNode.getLabel()) != null) {
+                                sim = stringSimCache
+                                        .get(firstNode.getLabel() + "@@" + secondNode.getLabel());
+                            } else if (stringSimCache.get(
+                                    secondNode.getLabel() + "@@" + firstNode.getLabel()) != null) {
+                                sim = stringSimCache
+                                        .get(secondNode.getLabel() + "@@" + firstNode.getLabel());
                             } else {
-                                sim = stringSim.similarity(firstNode.getLabel(), secondNode.getLabel());
+                                sim = stringSim.similarity(firstNode.getLabel(),
+                                        secondNode.getLabel());
                             }
                         }
                     } else if (tag == labelConfiguration.basicTypeLabel
@@ -533,7 +584,8 @@ class SimilarityMatrixHelper {
                             canlist.clear();
                         }
                         if (leafMatcher.match(firstNode, secondNode, sim)) {
-                            final MatchingCandidate candidate = new MatchingCandidate(firstNode, secondNode, sim);
+                            final MatchingCandidate candidate =
+                                    new MatchingCandidate(firstNode, secondNode, sim);
                             if (sim > maxSim) {
                                 maxSim = sim;
                             }
@@ -546,8 +598,10 @@ class SimilarityMatrixHelper {
 
         }
 
-        IdentityHashMap<ITree, Integer> orderedList1 = MtDiffOptimizedMatcher.getNodesInOrder(tree1);
-        IdentityHashMap<ITree, Integer> orderedList2 = MtDiffOptimizedMatcher.getNodesInOrder(tree2);
+        IdentityHashMap<ITree, Integer> orderedList1 =
+                MtDiffOptimizedMatcher.getNodesInOrder(tree1);
+        IdentityHashMap<ITree, Integer> orderedList2 =
+                MtDiffOptimizedMatcher.getNodesInOrder(tree2);
         Collections.sort(matchedLeaves, new PairComparator(orderedList1, orderedList2));
 
         while (!matchedLeaves.isEmpty()) {
@@ -563,9 +617,9 @@ class SimilarityMatrixHelper {
             currentResultSet.add(pair.dropValue());
             similarity += pair.getValue();
         }
-        InnerNodeSimilarityCalculator nodeMatcher = new
-                InnerNodeSimilarityCalculator(labelConfiguration, leavesMap1, leavesMap2,
-                directChildrenMap1, directChildrenMap2, currentResultSet);
+        InnerNodeSimilarityCalculator nodeMatcher =
+                new InnerNodeSimilarityCalculator(labelConfiguration, leavesMap1, leavesMap2,
+                        directChildrenMap1, directChildrenMap2, currentResultSet);
         for (final ITree firstNode : unmatchedNodes1) {
             final Iterator<ITree> iterator = unmatchedNodes2.iterator();
             if (firstNode.getChildren() == null || firstNode.getChildren().size() == 0) {
@@ -597,13 +651,13 @@ class SimilarityMatrixHelper {
     }
 
     private void updateSimilarityRow(boolean[][] aggregationFinished, double[][] similarityScores,
-             ITree[] firstAggregations, ITree[] secondAggregations,
-             ConcurrentHashMap<ITree, MatchingCandidate> currentResultMap, AtomicBoolean changed, int ipar,
-             ArrayList<ITree> newNodes, boolean onlyOneClassPair,
-             IdentityHashMap<ITree, Mapping> resultMap, NGramCalculator stringSim,
-             ConcurrentHashMap<String, Float> stringSimCache,
-             ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, Float>> similarityCache,
-             AtomicLong similarityEntries) {
+            ITree[] firstAggregations, ITree[] secondAggregations,
+            ConcurrentHashMap<ITree, MatchingCandidate> currentResultMap, AtomicBoolean changed,
+            int ipar, ArrayList<ITree> newNodes, boolean onlyOneClassPair,
+            IdentityHashMap<ITree, Mapping> resultMap, NGramCalculator stringSim,
+            ConcurrentHashMap<String, Float> stringSimCache,
+            ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, Float>> similarityCache,
+            AtomicLong similarityEntries) {
         {
 
             for (int j = 0; j < newNodes.size(); j++) {
@@ -616,10 +670,13 @@ class SimilarityMatrixHelper {
                             && secondAggregations[j].getType() != NodeAggregation.TAG) {
                         secondAggregations[j] = new NodeAggregation(secondAggregations[j]);
                     }
-                    final NodeAggregation firstAggregation = (NodeAggregation) firstAggregations[ipar];
-                    final NodeAggregation secondAggregation = (NodeAggregation) secondAggregations[j];
+                    final NodeAggregation firstAggregation =
+                            (NodeAggregation) firstAggregations[ipar];
+                    final NodeAggregation secondAggregation =
+                            (NodeAggregation) secondAggregations[j];
                     if (firstAggregation == null || firstAggregation.getAssociatedTree() == null
-                            || secondAggregation == null || secondAggregation.getAssociatedTree() == null) {
+                            || secondAggregation == null
+                            || secondAggregation.getAssociatedTree() == null) {
                         aggregationFinished[ipar][j] = true;
                     } else {
                         float similarity = Float.MIN_VALUE;
@@ -627,42 +684,51 @@ class SimilarityMatrixHelper {
                                 similarityCache.get(firstAggregation.getAssociatedTree());
                         if (firstAggregation.getHash() == secondAggregation.getHash()) {
                             similarity = 1.0f;
-                        } else if (firstAggregation.getAssociatedTree().getType() != secondAggregation
-                                .getAssociatedTree().getType()) {
+                        } else if (firstAggregation.getAssociatedTree()
+                                .getType() != secondAggregation.getAssociatedTree().getType()) {
                             similarity = 0.0f;
 
                         } else {
                             if (leavesMap1.get(firstAggregation.getAssociatedTree()).size()
-                                    * leavesMap2.get(secondAggregation.getAssociatedTree()).size() > 10000) {
+                                    * leavesMap2.get(secondAggregation.getAssociatedTree())
+                                            .size() > 10000) {
 
                                 if (map != null) {
                                     Float value = map.get(secondAggregation.getAssociatedTree());
                                     if (value != null) {
                                         similarity = value;
                                     } else {
-                                        similarity = simpleSimilarity(firstAggregation.getAssociatedTree(),
-                                                secondAggregation.getAssociatedTree(), stringSimCache, onlyOneClassPair,
-                                                resultMap, stringSim, currentResultMap);
-                                        if (similarityEntries.get() < MtDiffOptimizedMatcher.SIMILIARITY_CACHE_SIZE) {
-                                            map.put(secondAggregation.getAssociatedTree(), similarity);
+                                        similarity = simpleSimilarity(
+                                                firstAggregation.getAssociatedTree(),
+                                                secondAggregation.getAssociatedTree(),
+                                                stringSimCache, onlyOneClassPair, resultMap,
+                                                stringSim, currentResultMap);
+                                        if (similarityEntries
+                                                .get() < MtDiffOptimizedMatcher.SIMILIARITY_CACHE_SIZE) {
+                                            map.put(secondAggregation.getAssociatedTree(),
+                                                    similarity);
                                             similarityEntries.incrementAndGet();
                                         }
                                     }
                                 } else {
                                     ConcurrentHashMap<ITree, Float> tmp = new ConcurrentHashMap<>();
-                                    similarity = simpleSimilarity(firstAggregation.getAssociatedTree(),
-                                            secondAggregation.getAssociatedTree(), stringSimCache, onlyOneClassPair,
-                                            resultMap, stringSim, currentResultMap);
-                                    if (similarityEntries.get() < MtDiffOptimizedMatcher.SIMILIARITY_CACHE_SIZE) {
-                                        similarityCache.put(firstAggregation.getAssociatedTree(), tmp);
+                                    similarity =
+                                            simpleSimilarity(firstAggregation.getAssociatedTree(),
+                                                    secondAggregation.getAssociatedTree(),
+                                                    stringSimCache, onlyOneClassPair, resultMap,
+                                                    stringSim, currentResultMap);
+                                    if (similarityEntries
+                                            .get() < MtDiffOptimizedMatcher.SIMILIARITY_CACHE_SIZE) {
+                                        similarityCache.put(firstAggregation.getAssociatedTree(),
+                                                tmp);
                                         tmp.put(secondAggregation.getAssociatedTree(), similarity);
                                         similarityEntries.incrementAndGet();
                                     }
                                 }
                             } else {
                                 similarity = simpleSimilarity(firstAggregation.getAssociatedTree(),
-                                        secondAggregation.getAssociatedTree(), stringSimCache, onlyOneClassPair,
-                                        resultMap, stringSim, currentResultMap);
+                                        secondAggregation.getAssociatedTree(), stringSimCache,
+                                        onlyOneClassPair, resultMap, stringSim, currentResultMap);
                             }
 
                         }
@@ -675,5 +741,21 @@ class SimilarityMatrixHelper {
 
         }
         return;
+    }
+
+    private class IdComparator implements Comparator<ITree> {
+
+        /**
+         * Compare.
+         *
+         * @param o1 the o1
+         * @param o2 the o2
+         * @return the int
+         */
+        @Override
+        public int compare(ITree o1, ITree o2) {
+            return Integer.compare(o1.getId(), o2.getId());
+        }
+
     }
 }

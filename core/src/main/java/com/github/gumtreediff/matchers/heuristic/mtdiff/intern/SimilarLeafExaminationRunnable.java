@@ -1,21 +1,22 @@
 /*
  * This file is part of GumTree.
  *
- * GumTree is free software: you can redistribute it and/or modify it under the terms of the GNU
- * Lesser General Public License as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
- * General Public License for more details.
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
- * not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
  * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
-*/
+ */
 
 package com.github.gumtreediff.matchers.heuristic.mtdiff.intern;
 
@@ -73,42 +74,43 @@ public class SimilarLeafExaminationRunnable implements Callable<Set<MatchingCand
     /**
      * Instantiates a new optimized tree difference runnable.
      *
-     * @param oldNodes           the old nodes
-     * @param newNodes           the new nodes
-     * @param initialListOld     the initial list old
-     * @param count              the count
-     * @param stringSimCache     the string sim cache
-     * @param onlyOneClassPair   the only one class pair
-     * @param orderedListOld     the ordered list old
-     * @param orderedListNew     the ordered list new
-     * @param resultMap          the result map
-     * @param similarityCache    the similarity cache
-     * @param similarityEntries  the similarity entries
-     * @param parents1           the parents1
-     * @param parents2           the parents2
-     * @param leavesMap1         the leaves map1
-     * @param leavesMap2         the leaves map2
+     * @param oldNodes the old nodes
+     * @param newNodes the new nodes
+     * @param initialListOld the initial list old
+     * @param count the count
+     * @param stringSimCache the string sim cache
+     * @param onlyOneClassPair the only one class pair
+     * @param orderedListOld the ordered list old
+     * @param orderedListNew the ordered list new
+     * @param resultMap the result map
+     * @param similarityCache the similarity cache
+     * @param similarityEntries the similarity entries
+     * @param parents1 the parents1
+     * @param parents2 the parents2
+     * @param leavesMap1 the leaves map1
+     * @param leavesMap2 the leaves map2
      * @param labelConfiguration the label configuration
-     * @param leafMatcher        the l matcher
+     * @param leafMatcher the l matcher
      * @param directChildrenMap1 the direct children map1
      * @param directChildrenMap2 the direct children map2
-     * @param root1              the root1
-     * @param root2              the root2
-     * @param weightSimilarity   the weight similarity
-     * @param weightPosition     the weight position
+     * @param root1 the root1
+     * @param root2 the root2
+     * @param weightSimilarity the weight similarity
+     * @param weightPosition the weight position
      */
     public SimilarLeafExaminationRunnable(ArrayList<ITree> oldNodes, ArrayList<ITree> newNodes,
-              HashSet<MatchingCandidate> initialListOld, AtomicInteger count,
-              ConcurrentHashMap<String, Float> stringSimCache, boolean onlyOneClassPair,
-              IdentityHashMap<ITree, Integer> orderedListOld,
-              IdentityHashMap<ITree, Integer> orderedListNew, IdentityHashMap<ITree, Mapping> resultMap,
-              ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, Float>> similarityCache,
-              AtomicLong similarityEntries, Map<ITree, ITree> parents1, Map<ITree, ITree> parents2,
-              Map<ITree, ArrayList<ITree>> leavesMap1, Map<ITree, ArrayList<ITree>> leavesMap2,
-              LabelConfiguration labelConfiguration, LMatcher leafMatcher,
-              Map<ITree, ArrayList<ITree>> directChildrenMap1,
-              Map<ITree, ArrayList<ITree>> directChildrenMap2, ITree root1, ITree root2,
-              double weightSimilarity, double weightPosition) {
+            HashSet<MatchingCandidate> initialListOld, AtomicInteger count,
+            ConcurrentHashMap<String, Float> stringSimCache, boolean onlyOneClassPair,
+            IdentityHashMap<ITree, Integer> orderedListOld,
+            IdentityHashMap<ITree, Integer> orderedListNew,
+            IdentityHashMap<ITree, Mapping> resultMap,
+            ConcurrentHashMap<ITree, ConcurrentHashMap<ITree, Float>> similarityCache,
+            AtomicLong similarityEntries, Map<ITree, ITree> parents1, Map<ITree, ITree> parents2,
+            Map<ITree, ArrayList<ITree>> leavesMap1, Map<ITree, ArrayList<ITree>> leavesMap2,
+            LabelConfiguration labelConfiguration, LMatcher leafMatcher,
+            Map<ITree, ArrayList<ITree>> directChildrenMap1,
+            Map<ITree, ArrayList<ITree>> directChildrenMap2, ITree root1, ITree root2,
+            double weightSimilarity, double weightPosition) {
         super();
         this.oldNodes = oldNodes;
         this.newNodes = newNodes;
@@ -146,12 +148,15 @@ public class SimilarLeafExaminationRunnable implements Callable<Set<MatchingCand
     @Override
     public Set<MatchingCandidate> call() throws Exception {
         try {
-            initialList = new ConcurrentSkipListSet<>(new PairComparator(orderedListOld, orderedListNew));
+            initialList =
+                    new ConcurrentSkipListSet<>(new PairComparator(orderedListOld, orderedListNew));
             initialList.addAll(initialListOld);
-            BreadthFirstComparator<ITree> compOld = new BreadthFirstComparator<ITree>(orderedListOld);
+            BreadthFirstComparator<ITree> compOld =
+                    new BreadthFirstComparator<ITree>(orderedListOld);
             Collections.sort(oldNodes, compOld);
             compOld = null;
-            BreadthFirstComparator<ITree> compNew = new BreadthFirstComparator<ITree>(orderedListNew);
+            BreadthFirstComparator<ITree> compNew =
+                    new BreadthFirstComparator<ITree>(orderedListNew);
             Collections.sort(newNodes, compNew);
             compNew = null;
             boolean[][] aggregationFinished = new boolean[oldNodes.size()][newNodes.size()];
@@ -160,8 +165,8 @@ public class SimilarLeafExaminationRunnable implements Callable<Set<MatchingCand
             ITree[] secondAggregations = new ITree[newNodes.size()];
             final ConcurrentSkipListSet<MatchingCandidate> resultList =
                     new ConcurrentSkipListSet<>(new PairComparator(orderedListOld, orderedListNew));
-            final ConcurrentHashMap<ITree, MatchingCandidate> currentResultMap
-                    = new ConcurrentHashMap<>();
+            final ConcurrentHashMap<ITree, MatchingCandidate> currentResultMap =
+                    new ConcurrentHashMap<>();
             AtomicBoolean[] doneOld = new AtomicBoolean[oldNodes.size()];
             for (int i = 0; i < oldNodes.size(); i++) {
                 doneOld[i] = new AtomicBoolean();
@@ -177,17 +182,16 @@ public class SimilarLeafExaminationRunnable implements Callable<Set<MatchingCand
             }
             for (MatchingCandidate mc : initialList) {
 
-              ConcurrentHashMap<ITree, MatchingCandidate> tmp =
-                  candidateMap.get(mc.first);
-              if (tmp == null) {
-                tmp = new ConcurrentHashMap<>();
-                ConcurrentHashMap<ITree, MatchingCandidate> tmp2 = 
-                    candidateMap.putIfAbsent(mc.first, tmp);
-                if (tmp2 != null) {
-                    tmp = tmp2;
+                ConcurrentHashMap<ITree, MatchingCandidate> tmp = candidateMap.get(mc.first);
+                if (tmp == null) {
+                    tmp = new ConcurrentHashMap<>();
+                    ConcurrentHashMap<ITree, MatchingCandidate> tmp2 =
+                            candidateMap.putIfAbsent(mc.first, tmp);
+                    if (tmp2 != null) {
+                        tmp = tmp2;
+                    }
                 }
-              }
-              tmp.put(mc.second, mc);
+                tmp.put(mc.second, mc);
             }
             for (int i = 0; i < oldNodes.size(); i++) {
                 firstAggregations[i] = oldNodes.get(i);
@@ -220,13 +224,12 @@ public class SimilarLeafExaminationRunnable implements Callable<Set<MatchingCand
             AtomicBoolean changed = new AtomicBoolean(true);
             AtomicIntegerArray foundMaxArray = new AtomicIntegerArray(oldNodes.size());
 
-            new SimilarityMatrixHelper(aggregationFinished, firstAggregations,
-                    secondAggregations, currentResultMap, changed, oldNodes, newNodes, resultMap, stringSim,
+            new SimilarityMatrixHelper(aggregationFinished, firstAggregations, secondAggregations,
+                    currentResultMap, changed, oldNodes, newNodes, resultMap, stringSim,
                     stringSimCache, onlyOneClassPair, similarityScores, initialList, candidateMap,
-                    foundMaxArray, similarityCache, similarityEntries, parents1, parents2, leavesMap1,
-                    leavesMap2, labelConfiguration, leafMatcher,
-                    directChildrenMap1, directChildrenMap2, root1,
-                    root2, weightSimilarity, weightPosition).call();
+                    foundMaxArray, similarityCache, similarityEntries, parents1, parents2,
+                    leavesMap1, leavesMap2, labelConfiguration, leafMatcher, directChildrenMap1,
+                    directChildrenMap2, root1, root2, weightSimilarity, weightPosition).call();
 
             resultList.addAll(initialList);
             count.decrementAndGet();

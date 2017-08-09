@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
- * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
+ * Copyright 2015-2016 Georg Dotzler <georg.dotzler@fau.de>
+ * Copyright 2015-2016 Marius Kamp <marius.kamp@fau.de>
  */
 
 package com.github.gumtreediff.test;
