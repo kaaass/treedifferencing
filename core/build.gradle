@@ -7,6 +7,9 @@ dependencies {
 	compile 'org.eclipse.tycho:org.eclipse.jdt.core:3.11.0.v20150602-1242'
 	compile 'org.eclipse.core:runtime:3.10.0-v20140318-2214'
 	compile 'org.eclipse.tycho:org.eclipse.jdt.core:3.11.0.v20150602-1242'
+	compile files('../lib/JDime.jar')
+	compile files('../lib/JJ7.jar')
+   	compile 'org.apache.commons:commons-math3:3.6.1'
 
 }
 allprojects {

@@ -19,6 +19,7 @@
  */
 package com.github.gumtreediff.matchers;
 
+import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.matchers.CompositeMatcher;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
@@ -27,6 +28,7 @@ import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerLeavesMatcher
 import com.github.gumtreediff.matchers.heuristic.cd.ChangeDistillerParallelLeavesMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedyBottomUpMatcher;
 import com.github.gumtreediff.matchers.heuristic.gt.GreedySubtreeMatcher;
+import com.github.gumtreediff.matchers.heuristic.jdime.JDimeMatcher;
 import com.github.gumtreediff.matchers.optimal.rted.RtedMatcher;
 import com.github.gumtreediff.matchers.optimizations.CrossMoveMatcherThetaF;
 import com.github.gumtreediff.matchers.optimizations.IdenticalSubtreeMatcherThetaA;
@@ -209,6 +211,30 @@ public class OptimizedVersions {
             super(src, dst, store,
                     new Matcher[] { new IdenticalSubtreeMatcherThetaA(src, dst, store),
                             new RtedMatcher(src, dst, store),
+                            new LcsOptMatcherThetaB(src, dst, store),
+                            new UnmappedLeavesMatcherThetaC(src, dst, store),
+                            new InnerNodesMatcherThetaD(src, dst, store),
+                            new LeafMoveMatcherThetaE(src, dst, store),
+                            new CrossMoveMatcherThetaF(src, dst, store)
+
+                    });
+        }
+    }
+    
+    @Register(id = "jdimeabcdef", defaultMatcher = true, priority = Registry.Priority.HIGH)
+    public static class Jdimeabcdef extends CompositeMatcher {
+
+        /**
+         * Instantiates JDime with Theta A-F.
+         *
+         * @param src the src
+         * @param dst the dst
+         * @param store the store
+         */
+        public Jdimeabcdef(ITree src, ITree dst, MappingStore store) {
+            super(src, dst, store,
+                    new Matcher[] { new IdenticalSubtreeMatcherThetaA(src, dst, store),
+                            new JDimeMatcher(src, dst, store),
                             new LcsOptMatcherThetaB(src, dst, store),
                             new UnmappedLeavesMatcherThetaC(src, dst, store),
                             new InnerNodesMatcherThetaD(src, dst, store),

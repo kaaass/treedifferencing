@@ -25,6 +25,7 @@ import com.github.gumtreediff.client.Register;
 import com.github.gumtreediff.client.diff.AbstractDiffClient;
 import com.github.gumtreediff.gen.Registry;
 import com.github.gumtreediff.io.DirectoryComparator;
+import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.utils.Pair;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
@@ -52,6 +53,12 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         @Override
         public Option[] values() {
             return Option.Context.addValue(super.values(),
+                    new Option("-m", "The qualified name of the class implementing the matcher.", 1) {
+                        @Override
+                        protected void process(String name, String[] args) {
+                            matcher = args[0];
+                        }
+                    },
                     new Option("--port", String.format("set server port (default to)", defaultPort), 1) {
                         @Override
                         protected void process(String name, String[] args) {
@@ -81,12 +88,12 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
     public void run() {
         DirectoryComparator comparator = new DirectoryComparator(opts.src, opts.dst);
         comparator.compare();
-        configureSpark(comparator, opts.defaultPort);
+        configureSpark(comparator, opts.defaultPort, opts.matcher);
         Spark.awaitInitialization();
         System.out.println(String.format("Starting server: %s:%d", "http://127.0.0.1", opts.defaultPort));
     }
 
-    public static void configureSpark(final DirectoryComparator comparator, int port) {
+    public static void configureSpark(final DirectoryComparator comparator, int port, String matcher) {
         port(port);
         staticFiles.location("/web/");
         get("/", (request, response) -> {
@@ -103,7 +110,12 @@ public class WebDiff extends AbstractDiffClient<WebDiff.Options> {
         get("/diff/:id", (request, response) -> {
             int id = Integer.parseInt(request.params(":id"));
             Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-            Renderable view = new DiffView(pair.getFirst(), pair.getSecond());
+            Renderable view = null;
+            if (matcher == null) {
+                view = new DiffView(pair.getFirst(), pair.getSecond());
+            } else {
+                view =  new DiffView(pair.getFirst(), pair.getSecond(), matcher);
+            }
             return render(view);
         });
         get("/mergely/:id", (request, response) -> {

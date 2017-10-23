@@ -23,6 +23,8 @@ package com.github.gumtreediff.client.diff.web;
 import com.github.gumtreediff.gen.Generators;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
+import com.github.gumtreediff.matchers.OptimizedVersions.Jdimeabcdef;
+import com.github.gumtreediff.matchers.heuristic.jdime.JDimeMatcher;
 import com.github.gumtreediff.tree.TreeContext;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlCanvas;
@@ -52,6 +54,32 @@ public class DiffView implements Renderable {
         diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
         diffs.produce();
     }
+    
+    public DiffView(File fSrc, File fDst, String matcherClass) throws IOException {
+      try {
+        this.fSrc = fSrc;
+        this.fDst = fDst;
+        TreeContext src = null;
+        TreeContext dst = null;
+        if (matcherClass.equals(JDimeMatcher.class.getName()) 
+            || matcherClass.equals(Jdimeabcdef.class.getName())) {  
+          src = Generators.getInstance()
+              .getTree("java-jdime", fSrc.getAbsolutePath());
+          dst = Generators.getInstance()
+              .getTree("java-jdime", fDst.getAbsolutePath());
+        } else {
+          src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
+          dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
+        }
+        Matcher matcher = Matchers.getInstance().getMatcher(matcherClass, src.getRoot(), dst.getRoot());
+        matcher.match();
+        diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
+        diffs.produce();
+      } catch (Throwable t) {
+        t.printStackTrace();
+        throw t;
+      }
+  }
 
     @Override
     public void renderOn(HtmlCanvas html) throws IOException {

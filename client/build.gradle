@@ -1,3 +1,5 @@
+apply plugin: 'eclipse'
+
 description = 'GumTree abstract client module.'
 
 dependencies {
