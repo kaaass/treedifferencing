@@ -119,8 +119,6 @@ public class ChangeDistillerLeavesMatcher extends Matcher {
 
     }
 
-    private static final double LABEL_SIM_THRESHOLD = 0.5D;
-
     public ChangeDistillerLeavesMatcher(ITree src, ITree dst, MappingStore store) {
         super(src, dst, store);
     }

@@ -41,7 +41,7 @@ public class TestMtDiffMatcher {
         ITree dst = trees.getSecond().getRoot();
         Matcher matcher = new OptimizedVersions.MtDiff(src, dst, new MappingStore(), null);
         matcher.match();
-        assertEquals(5, matcher.getMappingSet().size());
+        assertEquals(5, matcher.getMappingsAsSet().size());
         assertTrue(matcher.getMappings().has(src, dst.getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(0), dst.getChild(0).getChild(0)));
         assertTrue(matcher.getMappings().has(src.getChild(1), dst.getChild(0).getChild(1)));

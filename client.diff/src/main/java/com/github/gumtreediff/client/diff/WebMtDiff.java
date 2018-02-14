@@ -58,7 +58,7 @@ public class WebMtDiff extends AbstractDiffClient<WebMtDiff.Options> {
         @Override
         public Option[] values() {
             return Option.Context.addValue(super.values(),
-                    new Option("--port", String.format("set server port (default to)", defaultPort), 1) {
+                    new Option("--port", String.format("set server port (default to %d)", defaultPort), 1) {
                         @Override
                         protected void process(String name, String[] args) {
                             int p = Integer.parseInt(args[0]);
