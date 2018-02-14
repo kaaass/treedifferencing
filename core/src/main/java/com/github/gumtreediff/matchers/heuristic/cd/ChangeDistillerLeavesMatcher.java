@@ -1,17 +1,18 @@
 /*
  * This file is part of GumTree.
  *
- * GumTree is free software: you can redistribute it and/or modify it under the terms of the GNU
- * Lesser General Public License as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * GumTree is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * GumTree is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTIcULAR PURPOSE. See the GNU Lesser
- * General Public License for more details.
+ * GumTree is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with GumTree. If
- * not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GumTree.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2011-2015 Jean-Rémy Falleri <jr.falleri@gmail.com>
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
@@ -24,7 +25,6 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
-
 import org.simmetrics.StringMetrics;
 
 import java.util.Collections;
@@ -42,6 +42,7 @@ import java.util.concurrent.Callable;
  */
 public class ChangeDistillerLeavesMatcher extends Matcher {
 
+    public static final double LABEL_SIM_THRESHOLD = Double.parseDouble(System.getProperty("gt.cd.lsim", "0.5"));
     private class ChangeDistillerCallableResult {
         public final List<Mapping> leafMappings;
         public final HashMap<Mapping, Double> simMap;
