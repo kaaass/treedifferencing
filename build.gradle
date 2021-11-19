@@ -1,42 +1,48 @@
-
 plugins {
-    id 'net.ltgt.errorprone' version '0.0.13'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.6.3'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+def projectsVersion = '3.1.0-SNAPSHOT'
+def isReleaseVersion = !projectsVersion.endsWith("SNAPSHOT")
 
 allprojects {
     apply plugin: 'idea'
 
     group = 'com.github.gumtreediff'
-    version = '2.1.2-SNAPSHOT'
+    version = projectsVersion
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 }
 
-ext.isRelease = !project.version.endsWith("SNAPSHOT")
-
 subprojects {
     apply plugin: 'java'
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
 
-    apply plugin: "net.ltgt.errorprone"
+    compileJava {
+        options.compilerArgs << '-Xlint:deprecation'
+    }
 
-    apply plugin: 'checkstyle'
-    checkstyle {
-        toolVersion = '7.0'
-        configFile = rootProject.file('gumtree_checkstyle.xml')
-        configProperties = [suppressionFile: "${rootProject.file('checkstyle_ignore.xml')}"]
-        ignoreFailures = false
-        showViolations = true
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    javadoc {
+        options.addBooleanOption('html5', true)
     }
 
     dependencies {
-        testCompile 'junit:junit:[4,5)'
+        testImplementation 'junit:junit:[4,5)'
     }
 
     test {
@@ -48,7 +54,7 @@ subprojects {
 
 configure(subprojects.findAll { it.name != 'core' }) {
     dependencies {
-        compile project(':core')
+        implementation project(':core')
     }
 }
 
@@ -61,7 +67,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr3') }) {
 
     if (it.name.startsWith('gen.antlr3-')) {
         dependencies {
-            compile project(':gen.antlr3')
+            implementation project(':gen.antlr3')
         }
     }
 }
@@ -75,7 +81,7 @@ configure(subprojects.findAll { it.name.startsWith('gen.antlr4') }) {
 
     if (it.name.startsWith('gen.antlr4-')) {
         dependencies {
-            compile project(':gen.antlr4')
+            implementation project(':gen.antlr4')
         }
     }
 }
@@ -85,14 +91,14 @@ def jacocoProjects = subprojects.findAll { it.name in jacocoProjectsNames }
 configure(jacocoProjects) {
     apply plugin: 'jacoco'
     jacoco {
-        toolVersion = '0.7.7.201606060606'
+        toolVersion = '0.8.6'
     }
 
     jacocoTestReport {
         reports {
-            html.enabled = true
-            xml.enabled = true
-            csv.enabled = false
+            html.required = true
+            xml.required = true
+            csv.required = false
         }
     }
 }
@@ -101,107 +107,99 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     description = 'Generates an aggregate report from all subprojects'
     dependsOn(jacocoProjects.test)
 
-    additionalSourceDirs = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(jacocoProjects.sourceSets.main.output)
-    executionData = files(jacocoProjects.jacocoTestReport.executionData)
+    getAdditionalSourceDirs().from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    getSourceDirectories().from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    getClassDirectories().from = files(jacocoProjects.sourceSets.main.output)
+    getExecutionData().from = files(jacocoProjects.jacocoTestReport.executionData)
 
     reports {
-        html.enabled = true
-        xml.enabled = true
+        html.required = true
+        xml.required = true
     }
 }
 
-coveralls {
-    sourceDirs = jacocoProjects.sourceSets.main.allSource.srcDirs.flatten()
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
-}
+def projectDescriptions = [
+    client: 'GumTree abstract client module.',
+    'client.diff': 'GumTree diff client.',
+    core: 'GumTree core module.', 'gen.antlr3': 'GumTree abstract AntLR module.',
+    'gen.antlr3-antlr': 'GumTree tree generator for AntLR grammars (AntLR based)',
+    'gen.antlr3-json': 'GumTree tree generator for JSON code (AntLR based).',
+    'gen.antlr3-php': 'GumTree tree generator for PHP code (AntLR based).',
+    'gen.antlr3-r': 'GumTree tree generator for R code (AntLR based).',
+    'gen.antlr3-xml': 'GumTree tree generator for XML code (AntLR based).',
+    'gen.antlr4': 'GumTree abstract AntLR4 module.',
+    'gen.antlr4-matlab': 'GumTree abstract AntLR4 module.',
+    'gen.c': 'GumTree tree generator for C code. Requires cgum.',
+    'gen.css': 'GumTree tree generator for CSS code based on ph-css.',
+    'gen.javaparser': 'GumTree tree generator for Java code (JavaParser based).',
+    'gen.jdt': 'GumTree tree generator for Java code (Eclipse JDT based).',
+    'gen.js': 'GumTree tree generator for JavaScript code (Rhino based).',
+    'gen.python': 'GumTree tree generator for Python. Requires pythonparser.',
+    'gen.ruby': 'GumTree tree generator for Ruby code (JRuby based).',
+    'gen.srcml': 'GumTree tree generator for C/C++, C# and Java code. Requires srcml.',
+]
 
-tasks.coveralls {
-    group = 'Coverage reports'
-    description = 'Uploads the aggregated coverage report to Coveralls'
+configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
+    apply plugin: "maven-publish"
+    apply plugin: "signing"
 
-    dependsOn jacocoRootReport
-    onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
-}
+    publishing {        
+        publications {
+            gumtreeDist(MavenPublication) {
+                from(components.java)
 
-evaluationDependsOnChildren();
+                pom {
+                    name = "GumTree ${subproject.name}"
+                    description = projectDescriptions[subproject.name]
+                    url = 'https://github.com/GumTreeDiff/gumtree/'
 
-configure(subprojects) {
-    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
-        it.test.enabled = false
-}
-
-if (project.hasProperty('mvn')) {
-    configure(subprojects.findAll { !(it.name in ['dist', 'benchmark']) }) { subproject ->
-        apply plugin: 'maven'
-        apply plugin: 'signing'
-
-        task javadocJar(type: Jar) {
-            classifier = 'javadoc'
-            from javadoc
-        }
-
-        task sourcesJar(type: Jar) {
-            classifier = 'sources'
-            from sourceSets.main.allSource
-        }
-
-        artifacts {
-            archives javadocJar, sourcesJar
-        }
-
-        signing {
-            sign configurations.archives
-        }
-
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-					authentication(userName: hasProperty('ossrhUsername')?ossrhUsername:'', password: hasProperty('ossrhPassword')?ossrhPassword:'')
-				}
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication(userName: hasProperty('ossrhUsername')?ossrhUsername:'', password: hasProperty('ossrhPassword')?ossrhPassword:'')
+                    scm {
+                        connection = 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                        developerConnection = 'scm:git:https://github.com/GumTreeDiff/gumtree/'
+                        url = 'https://github.com/GumTreeDiff/gumtree/'
                     }
 
-                    pom.project {
-                        name "GumTree ${subproject.name}"
-                        description subproject.description
-                        url 'https://github.com/GumTreeDiff/gumtree/'
-                        packaging 'jar'
+                    licenses {
+                        license {
+                            name = 'GNU Lesser General Public License v3.0'
+                            url = 'h ttps://www.gnu.org/copyleft/lesser.html'
+                        }
+                    }
 
-                        scm {
-                            connection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-                            developerConnection 'scm:git:https://github.com/GumTreeDiff/gumtree/'
-                            url 'https://github.com/GumTreeDiff/gumtree/'
+                    developers {
+                        developer {
+                            id = 'jre'
+                            name = 'Jean-Rémy Falleri'
+                            email = 'jr.falleri@gmail.com'
                         }
 
-                        licenses {
-                            license {
-                                name 'GNU Lesser General Public License v3.0'
-                                url 'https://www.gnu.org/copyleft/lesser.html'
-                            }
+                        developer {
+                            id = 'flop'
+                            name = 'Floréal Morandat'
+                            email = 'florealm@gmail.com'
                         }
 
-                        developers {
-                            developer {
-                                id 'jre'
-                                name 'Jean-Rémy Falleri'
-                                email 'jr.falleri@gmail.com'
-                            }
-
-                            developer {
-                                id 'flop'
-                                name 'Floréal Morandat'
-                                email 'florealm@gmail.com'
-                            }
+                        developer {
+                            id = 'matias'
+                            name = 'Matias Martinez'
+                            email = 'matias.sebastian.martinez@gmail.com'
                         }
                     }
                 }
             }
         }
     }
+
+    signing {
+        required { isReleaseVersion }
+        useInMemoryPgpKeys(findProperty("gumtreeKey"), findProperty("gumtreeKeyPassphrase"))
+        sign publishing.publications.gumtreeDist
+    }
+}
+
+evaluationDependsOnChildren()
+
+configure(subprojects) {
+    if (project.hasProperty('skipNative') && it.hasProperty('isNative') && it.isNative == true)
+        it.test.enabled = false
 }

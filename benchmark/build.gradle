@@ -1,74 +1,47 @@
 plugins {
-    id "me.champeau.gradle.jmh" version "0.4.5"
-}
-
-uploadArchives.enabled = false
-jar.enabled = false
-
-task checkActions(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.dist.ActionsCollector'
-    args 'check'
-}
-
-task collectActions(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.github.gumtree.dist.ActionsCollector'
-    args 'collect'
-}
-
-if (project.hasProperty('trees')) {
-    task collectTrees(type: JavaExec) {
-        classpath = sourceSets.main.runtimeClasspath
-        main = 'com.github.gumtree.dist.BenchmarkCollector'
-        args trees
-    }
-}
-
-def getGitHash = { ->
-  try {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-      commandLine 'git', 'describe', '--dirty=+', '--tags'
-      standardOutput = stdout
-    }
-    return stdout.toString().trim()
-  } catch (all) {
-    return '0000000'
-  }
-}
-
-jmh {
-    jmhVersion = '1.19'
-    fork = 0
-    warmupIterations = 1
-    iterations = 3
-    benchmarkMode = ['AverageTime']
-    benchmarkParameters = [
-      'refPath' : new File("${project.projectDir}/src/jmh/resources/").listFiles()
-        .collect { it.getAbsolutePath() }
-        .findAll { it.matches(".*_v0_.*") }
-    ]
-    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human_${new Date().getTime()}_${getGitHash()}.txt")
-    resultsFile = project.file("${project.buildDir}/reports/jmh/results_${new Date().getTime()}_${getGitHash()}.csv")
-    resultFormat = 'CSV'
-}
-
-task jmhPlot(type: Exec, dependsOn: 'jmh') {
-    commandLine "R", "-f", "${project.projectDir}/src/main/r/plotBenchmark.R", "${project.buildDir}/reports/jmh/"
+    id 'application'
 }
 
 dependencies {
-    compile project(':client')
-    compile project(':client.diff')
-    compile project(':gen.antlr3')
-    compile project(':gen.antlr3-antlr')
-    compile project(':gen.antlr3-json')
-    compile project(':gen.antlr3-php')
-    compile project(':gen.antlr3-r')
-    compile project(':gen.antlr3-xml')
-    compile project(':gen.c')
-    compile project(':gen.jdt')
-    compile project(':gen.js')
-    compile project(':gen.ruby')
+    implementation project(':client')
+    implementation project(':client.diff')
+    implementation project(':gen.antlr3')
+    implementation project(':gen.antlr3-antlr')
+    implementation project(':gen.antlr3-json')
+    implementation project(':gen.antlr3-php')
+    implementation project(':gen.antlr3-r')
+    implementation project(':gen.antlr3-xml')
+    implementation project(':gen.c')
+    implementation project(':gen.jdt')
+    implementation project(':gen.js')
+    implementation project(':gen.ruby')
+}
+
+jar.enabled = false
+run.enabled = false
+
+task computeResults(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.Defects4JLauncher'
+    args "${project.projectDir}/defects4j", "${project.buildDir}/reports/defects4j.csv"
+}
+
+task plotResults(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/plotDefects4J.py", "${project.buildDir}/reports/defects4j.csv"
+}
+
+task testSizeRegressions(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+}
+
+task displaySizeDifferences(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/displayDifferences.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "size"
+}
+
+task testRuntimeRegressions(type: Exec) {
+    commandLine "python3", "${project.projectDir}/src/main/python/testRegressions.py", "${project.projectDir}/defects4j.csv", "${project.buildDir}/reports/defects4j.csv", "runtime"
+}
+
+task runBenchmark() {
+    dependsOn computeResults, plotResults, testSizeRegressions, testRuntimeRegressions
 }

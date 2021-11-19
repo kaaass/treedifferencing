@@ -1,34 +1,50 @@
-apply plugin: 'application'
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'application'
+}
 
-mainClassName = 'com.github.gumtreediff.client.Run'
-applicationName = 'gumtree'
-jar.enabled = false
-distZip.archiveName  = 'gumtree.zip'
-uploadArchives.enabled = false
-distTar.enabled = false
+dependencies {
+	implementation project(':client')
+	implementation project(':client.diff')
+	implementation project(':gen.antlr3')
+	implementation project(':gen.antlr3-antlr')
+	implementation project(':gen.antlr3-json')
+	implementation project(':gen.antlr3-php')
+	implementation project(':gen.antlr3-r')
+	implementation project(':gen.antlr3-xml')
+	implementation project(':gen.c')
+	implementation project(':gen.jdt')
+	implementation project(':gen.python')
+	implementation project(':gen.srcml')
+}
 
 description = 'GumTree distribution.'
 
-dependencies {
-	compile project(':client')
-	compile project(':client.diff')
-	compile project(':gen.antlr3')
-	compile project(':gen.antlr3-antlr')
-	compile project(':gen.antlr3-json')
-	compile project(':gen.antlr3-php')
-	compile project(':gen.antlr3-r')
-	compile project(':gen.antlr3-xml')
-	compile project(':gen.c')
-	compile project(':gen.css')
-	compile project(':gen.jdt')
-	compile project(':gen.js')
-	compile project(':gen.python')
-	compile project(':gen.ruby')
-	compile project(':gen.srcml')
-}
-
-run {
-	if ( project.hasProperty("params") ) {
-		args Eval.me(params)
+shadowJar {
+	archiveBaseName.set('gumtree')
+	archiveClassifier.set('')
+	archiveVersion.set('')
+	mergeServiceFiles()
+	mergeServiceFiles {
+		path = 'META-INF/annotations'
 	}
 }
+
+distributions {
+	shadow {
+		distributionBaseName = 'gumtree'
+	}
+}
+
+mainClassName = 'com.github.gumtreediff.client.Run'
+applicationName = 'gumtree'
+archivesBaseName = 'gumtree'
+shadowDistZip.enabled = true
+distTar.enabled = false
+distZip.enabled = false
+startScripts.enabled = false
+shadowDistTar.enabled = false
+
+jar.enabled = false
+
+build.finalizedBy installShadowDist
